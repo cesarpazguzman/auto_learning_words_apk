@@ -1,0 +1,35 @@
+Aplicación para aprender de forma autónoma palabras en inglés.
+
+DOCUMENTO DE DISEÑO (Parte básica)
+
+Condiciones:
+    - Se aplicará en todo momento el material design
+    - Los strings irán en el fichero, porque será traducida
+
+Necesidades:
+    - SqLiteDatabase
+    - Material Design
+    - Animaciones
+
+1- El usuario abre la aplicación y se encuentra con una lista de listas de palabras. Se le permite al usuario borrar una lista
+entera, y añadir una lista vacía.
+
+2- Las carpetas se identificarán con un icono de carpeta y el nombre de la misma, con un número
+de elementos contenidos en ellas. Se borrarán al mantener seleccionado durante 2 segundos y habilitará la selección de más
+elementos a eliminar. Al pusar que ejecute una animación, indicando que el usuario está presionando y dando a entender que
+un evento se va a disparar. Se permite editar los elementos que conforman la lista.
+
+3- Botones en la parte superior de la lista, de añadir carpeta/añadir palabra. Las carpetas pueden contener otras carpetas. Si
+la lista contiene al menos una carpeta, ya no se permite añadir palabras.
+
+4- Añadir una palabra: Se añade la palabra en el idioma deseado, y su traducción.
+
+4- Se permitirá hacer un test en una carpeta de elementos. El test consistirá en la siguiente forma:
+    - Aparecerá la palabra en el otro idioma. El usuario deberá de decir el significado de esa palabra, no escribirlo,
+    solo pensarlo. Cuando lo tenga, le da a un botón "Traducir", para pder ver la respuesta. Si el usuario ha acertado
+    deberá marcar el botón verde, sino el rojo y así hasta finalizar el test. De esta forma el usuario podrá aprender
+    de manera autodidacta las palabras. Al finalizar se dará un resultado. No merece la pena guardar en un histórico,
+    quizás guardar de formar estadística, en cada palabra, cuales son las que más fallos se cometen.
+
+
+DOCUMENTO DE DISEÑO (Parte avanzada)

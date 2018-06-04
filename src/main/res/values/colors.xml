@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="color_background">#ebebeb</color>
+    <color name="toolbar_color">#223a60</color>
+    <color name="toolbar_text_color">#7298d1</color>
+    <color name="popup_background">#ecf1f9</color>
+
+    <color name="list_item_selected_state">#dee7e7</color>
+    <color name="list_item_normal_state">#FFFFFF</color>
+
+    <color name="color_links">#0000FF</color>
+</resources>
