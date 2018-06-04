@@ -8,19 +8,19 @@ public class item_model implements itemVisitable {
     private String original;
     private String translation;
     private int folder_id;
+    private String comment;
+    private String example1;
+    private String example2;
 
-    public item_model(int id, String original, String translation, int folder_id) {
+    public item_model(int id, String original, String translation, int folder_id, String comment,
+                      String example1, String example2) {
         this.id = id;
         this.original = original;
         this.translation = translation;
         this.folder_id = folder_id;
-    }
-
-    public item_model(int id, String original, String translation) {
-        this.id = id;
-        this.original = original;
-        this.translation = translation;
-        this.folder_id = 0;
+        this.comment = comment;
+        this.example1 = example1;
+        this.example2 = example2;
     }
 
     public int getId() {
@@ -37,6 +37,18 @@ public class item_model implements itemVisitable {
 
     public int getFolder_id() {
         return folder_id;
+    }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public String getExample1() {
+        return example1;
+    }
+
+    public String getExample2() {
+        return example2;
     }
 
     @Override

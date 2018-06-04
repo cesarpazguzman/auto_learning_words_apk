@@ -20,6 +20,9 @@ public class item implements tableInterface {
         public static final String ORIGINAL = "original";
         public static final String TRANSLATION = "translation";
         public static final String FOLDER_ID = "folder_id";
+        public static final String COMMENT = "comment";
+        public static final String EXAMPLE1= "example_1";
+        public static final String EXAMPLE2= "example_2";
     }
 
     public static final String CREATE_TABLE2 = "CREATE TABLE "+NAME_TABLE+ "("
@@ -27,6 +30,9 @@ public class item implements tableInterface {
             +col.ORIGINAL+" text not null, "
             +col.TRANSLATION+" text not null, "
             +col.FOLDER_ID+" integer, "
+            +col.COMMENT+" text, "
+            +col.EXAMPLE1+" text, "
+            +col.EXAMPLE2+"text "
             +" FOREIGN KEY ("+col.FOLDER_ID+") REFERENCES "+ folder.NAME_TABLE+ "("+folder.col.ID+"));";
 
     private SQLiteDatabase db;
@@ -43,6 +49,9 @@ public class item implements tableInterface {
         values.put(col.ORIGINAL, original);
         values.put(col.TRANSLATION, traduccion);
         values.put(col.FOLDER_ID, parent);
+        values.put(col.COMMENT, "");
+        values.put(col.EXAMPLE1, "");
+        values.put(col.EXAMPLE2, "");
         return values;
     }
 
@@ -56,7 +65,10 @@ public class item implements tableInterface {
             int id = cursor.getInt(cursor.getColumnIndex(col.ID));
             return new item_model(id, vals.getAsString(col.ORIGINAL),
                     vals.getAsString(col.TRANSLATION),
-                    vals.getAsInteger(col.FOLDER_ID));
+                    vals.getAsInteger(col.FOLDER_ID),
+                    vals.getAsString(col.COMMENT),
+                    vals.getAsString(col.COMMENT),
+                    vals.getAsString(col.EXAMPLE2));
         }
 
         return null;
@@ -85,9 +97,13 @@ public class item implements tableInterface {
                 int id = cursor.getInt(cursor.getColumnIndex(folder.col.ID));
                 String original = cursor.getString(cursor.getColumnIndex(col.ORIGINAL));
                 String traduccion = cursor.getString(cursor.getColumnIndex(col.TRANSLATION));
+                String comment = cursor.getString(cursor.getColumnIndex(col.COMMENT));
+                String example1 = cursor.getString(cursor.getColumnIndex(col.EXAMPLE1));
+                String example2 = cursor.getString(cursor.getColumnIndex(col.EXAMPLE2));
                 int parent_id = cursor.getInt(cursor.getColumnIndex(col.FOLDER_ID));
 
-                listItems.add(new item_model(id, original, traduccion, parent_id));
+                listItems.add(new item_model(id, original, traduccion, parent_id,
+                        comment, example1, example2));
             } while (cursor.moveToNext());
         }
 
