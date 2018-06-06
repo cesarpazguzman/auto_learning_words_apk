@@ -88,7 +88,6 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:clickable="false"
-            android:text="The investors pulled out their funds when the company closed down."
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

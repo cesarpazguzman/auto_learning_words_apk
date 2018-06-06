@@ -155,9 +155,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         case R.id.add_folder:
                             LayoutInflater inflater = MainActivity.this.getLayoutInflater();
                             View view = inflater.inflate(R.layout.dialog_folder, null);
-                            EditText et_folder_name = view.findViewById(R.id.et_item_original);
-                            et_folder_name.requestFocus();
-                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                             alertDialogHelper.showAlertDialog("","",
                                     "ACEPTAR","CANCELAR", 2, true, view);
                             break;
@@ -165,16 +162,17 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         case R.id.add_item:
                             inflater = MainActivity.this.getLayoutInflater();
                             view = inflater.inflate(R.layout.dialog_item, null);
-                            EditText et_item_original = view.findViewById(R.id.et_item_original);
                             ImageButton add_example_item = view.findViewById(R.id.add_example_item);
                             final EditText et_example_two = view.findViewById(R.id.et_example_two);
                             add_example_item.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
                                     et_example_two.setVisibility(View.VISIBLE);
+                                    et_example_two.requestFocus();
+                                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
                                 }
                             });
-                            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+
                             alertDialogHelper.showAlertDialog("","",
                             "ACEPTAR","CANCELAR", 3, true, view);
                             break;
@@ -296,11 +294,26 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         else if(from==3){
             EditText et_item_original = view.findViewById(R.id.et_item_original);
             EditText et_item_traduccion = view.findViewById(R.id.et_item_traduccion);
+            EditText et_example_one = view.findViewById(R.id.et_example_one);
+            EditText et_example_two = view.findViewById(R.id.et_example_two);
+            EditText et_comments = view.findViewById(R.id.et_comments);
+
+            String comment = !et_comments.getText().toString().isEmpty() ? et_comments.getText().toString() : "";
+            String example1 = !et_example_one.getText().toString().isEmpty() ? et_example_one.getText().toString() : "";
+            String example2 = !et_example_two.getText().toString().isEmpty() ? et_example_two.getText().toString() : "";
 
             itemVisitable ins = item_table.insert(((item)item_table).values(
                     et_item_original.getText().toString(),
-                    et_item_traduccion.getText().toString(), current_level));
+                    et_item_traduccion.getText().toString(), current_level,
+                    comment,example1,
+                    example2));
             custom_adapter.add_element(ins);
+
+
+            ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
+            view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
+
+            System.out.println("VIEW IDS: "+view_ids);
         }
     }
 
