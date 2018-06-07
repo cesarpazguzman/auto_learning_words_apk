@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
@@ -29,19 +31,19 @@ import com.personales.proyectos.autolearningwords.Activity.BaseActivity;
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
 import com.personales.proyectos.autolearningwords.Base.AlertDialogHelper;
 import com.personales.proyectos.autolearningwords.Base.RecyclerItemClickListener;
+import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Interfaces.tableInterface;
-import com.personales.proyectos.autolearningwords.Models.folder_model;
-import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 
@@ -78,6 +80,25 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         rv_folders.setLayoutManager(mLayoutManager);
 
+        SwipeHelper swipeHelper = new SwipeHelper(this, rv_folders) {
+        };
+
+        /*final SwipeControllerEdit swipeController = new SwipeControllerEdit(new SwipeControllerActions() {
+            @Override
+            public void onRightClicked(int position) {
+
+            }
+        });
+        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
+        itemTouchhelper.attachToRecyclerView(rv_folders);
+
+        rv_folders.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });*/
+
         custom_adapter = new custom_adapter(mainTypeViewModel);
         rv_folders.setAdapter(custom_adapter);
 
@@ -101,7 +122,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if (!isMultiSelect) {
+                if (!isMultiSelect && !SwipeHelper.IS_TOUCH) {
+
                     custom_adapter.clear_selected_item();
                     isMultiSelect = true;
 
@@ -312,8 +334,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
             ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
             view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
-
-            System.out.println("VIEW IDS: "+view_ids);
         }
     }
 

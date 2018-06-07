@@ -92,6 +92,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
 
     private View.OnClickListener collapse_expand_listener = new View.OnClickListener() {
         public void onClick(View v) {
+            System.out.println("MULTISELECTED ACTIVED: "+baseViewHolder.MULTISELECT_ACTIVED);
             if(!baseViewHolder.MULTISELECT_ACTIVED && !txt_examples_item.getText().toString().isEmpty()){
                 if(expanded){
                     bt_expand_item.setVisibility(View.VISIBLE);
