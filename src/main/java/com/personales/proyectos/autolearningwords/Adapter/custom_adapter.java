@@ -34,15 +34,27 @@ public class custom_adapter extends multi_select_adapter{
     }
 
     public void add_element(itemVisitable item){
-        this.viewModels.add(item);
-        Collections.sort(this.viewModels, order);
-        notifyDataSetChanged();
+        boolean inserted = false;
+        for(int i=0;i<viewModels.size();++i){
+            if(viewModels.get(i).order()==item.order()){
+                if(viewModels.get(i).getName().compareTo(item.getName().toUpperCase())>0){
+                    this.viewModels.add(i,item);
+                    notifyItemInserted(i);
+                    inserted = true;
+                    break;
+                }
+            }
+        }
+        if(!inserted){
+            this.viewModels.add(viewModels.size(),item);
+            notifyItemInserted(viewModels.size()-1);
+        }
     }
 
     public void remove_element(itemVisitable item){
-        this.viewModels.remove(item);
-        Collections.sort(this.viewModels, order);
-        notifyDataSetChanged();
+        int pos_remove = this.viewModels.indexOf(item);
+        this.viewModels.remove(pos_remove);
+        notifyItemRemoved(pos_remove);
     }
 
     @Override
