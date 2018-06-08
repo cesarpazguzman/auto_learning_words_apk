@@ -74,6 +74,34 @@ public class custom_adapter extends multi_select_adapter{
     }
 
     @Override
+    public void add_selected_item(itemVisitable item) {
+        super.add_selected_item(item);
+        int pos = this.viewModels.indexOf(item);
+        notifyItemChanged(pos);
+    }
+
+    @Override
+    public void remove_selected_item(itemVisitable item) {
+        super.remove_selected_item(item);
+        int pos = this.viewModels.indexOf(item);
+        notifyItemChanged(pos);
+    }
+
+    @Override
+    public void clear_selected_item() {
+        List<Integer> items_to_clear = new ArrayList<>();
+        ArrayList<itemVisitable> items_selected = get_selected_items();
+        for(int i=0;i<items_selected.size();++i){
+            items_to_clear.add(this.viewModels.indexOf(items_selected.get(i)));
+        }
+        super.clear_selected_item();
+
+        for(int i=0;i<items_to_clear.size();++i){
+            notifyItemChanged(items_to_clear.get(i));
+        }
+    }
+
+    @Override
     public void onBindViewHolder(baseViewHolder holder, int position) {
         holder.bind(viewModels.get(position));
 

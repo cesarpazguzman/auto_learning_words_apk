@@ -26,18 +26,15 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
     public void add_selected_item(itemVisitable item){
         selected_items.add(item);
         baseViewHolder.MULTISELECT_ACTIVED = true;
-        notifyDataSetChanged();
     }
 
     public void remove_selected_item(itemVisitable item){
         selected_items.remove(item);
-        notifyDataSetChanged();
     }
 
     public void clear_selected_item(){
         selected_items = new ArrayList<>();
         baseViewHolder.MULTISELECT_ACTIVED = false;
-        notifyDataSetChanged();
     }
 
     public ArrayList<itemVisitable> get_selected_items(){

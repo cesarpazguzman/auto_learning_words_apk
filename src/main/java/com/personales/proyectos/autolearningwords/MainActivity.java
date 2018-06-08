@@ -17,6 +17,7 @@ import android.text.InputType;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -59,6 +60,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     private ActionMode mActionMode;
     private AlertDialogHelper alertDialogHelper;
     private InputMethodManager imm;
+    private SwipeHelper swipeHelper;
 
     @Override
     public int getLayoutId() {
@@ -80,24 +82,23 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         rv_folders.setLayoutManager(mLayoutManager);
 
-        SwipeHelper swipeHelper = new SwipeHelper(this, rv_folders) {
-        };
-
-        /*final SwipeControllerEdit swipeController = new SwipeControllerEdit(new SwipeControllerActions() {
+        swipeHelper = new SwipeHelper(this, rv_folders) {
             @Override
-            public void onRightClicked(int position) {
-
+            public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
+                underlayButtons.add(new SwipeHelper.UnderlayButton(
+                        "Edit",
+                        0,
+                        Color.parseColor("#223a60"),
+                        new SwipeHelper.UnderlayButtonClickListener() {
+                            @Override
+                            public void onClick(int pos) {
+                                // TODO: onDelete
+                            }
+                        }
+                ));
             }
-        });
-        ItemTouchHelper itemTouchhelper = new ItemTouchHelper(swipeController);
-        itemTouchhelper.attachToRecyclerView(rv_folders);
+            };
 
-        rv_folders.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                swipeController.onDraw(c);
-            }
-        });*/
 
         custom_adapter = new custom_adapter(mainTypeViewModel);
         rv_folders.setAdapter(custom_adapter);
@@ -118,6 +119,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             public void onItemClick(View view, int position) {
                 if (isMultiSelect)
                     multi_select(position);
+
+                if(!SwipeHelper.IS_TOUCH){
+                    swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+                }
             }
 
             @Override
@@ -312,6 +317,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             itemVisitable ins = folder_table.insert(((folder)folder_table).values(
                     et_folder_name.getText().toString(), current_level));
             custom_adapter.add_element(ins);
+
+            if(!SwipeHelper.IS_TOUCH){
+                swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+            }
         }
         else if(from==3){
             EditText et_item_original = view.findViewById(R.id.et_item_original);
@@ -334,6 +343,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
             ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
             view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
+
+            if(!SwipeHelper.IS_TOUCH){
+                swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+            }
         }
     }
 

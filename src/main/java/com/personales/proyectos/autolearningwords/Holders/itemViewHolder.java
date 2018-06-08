@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
 import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
@@ -92,8 +93,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
 
     private View.OnClickListener collapse_expand_listener = new View.OnClickListener() {
         public void onClick(View v) {
-            System.out.println("MULTISELECTED ACTIVED: "+baseViewHolder.MULTISELECT_ACTIVED);
-            if(!baseViewHolder.MULTISELECT_ACTIVED && !txt_examples_item.getText().toString().isEmpty()){
+            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.swipedPos==-1&& !txt_examples_item.getText().toString().isEmpty()){
                 if(expanded){
                     bt_expand_item.setVisibility(View.VISIBLE);
                     bt_collapse_item.setVisibility(View.GONE);
