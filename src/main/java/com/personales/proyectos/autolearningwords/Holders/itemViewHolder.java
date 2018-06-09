@@ -93,7 +93,8 @@ public class itemViewHolder extends baseViewHolder<item_model> {
 
     private View.OnClickListener collapse_expand_listener = new View.OnClickListener() {
         public void onClick(View v) {
-            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.swipedPos==-1&& !txt_examples_item.getText().toString().isEmpty()){
+            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1&& !txt_examples_item.getText().toString().isEmpty()){
+                System.out.println("ENTRA");
                 if(expanded){
                     bt_expand_item.setVisibility(View.VISIBLE);
                     bt_collapse_item.setVisibility(View.GONE);

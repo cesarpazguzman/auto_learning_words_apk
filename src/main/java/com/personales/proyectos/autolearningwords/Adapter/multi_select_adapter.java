@@ -54,7 +54,6 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
             holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.getContext(), R.color.list_item_selected_state));
         else
             holder.itemView.setBackgroundColor(ContextCompat.getColor(holder.getContext(), R.color.list_item_normal_state));
-        System.out.println("selected itemS "+selected_items);
     }
 
     @Override

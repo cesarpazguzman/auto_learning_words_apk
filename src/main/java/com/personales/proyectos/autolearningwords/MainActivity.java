@@ -86,18 +86,21 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             @Override
             public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
                 underlayButtons.add(new SwipeHelper.UnderlayButton(
-                        "Edit",
-                        0,
+                        "",
+                        getResources().getDrawable(R.drawable.ic_edit_black_24dp),
                         Color.parseColor("#223a60"),
                         new SwipeHelper.UnderlayButtonClickListener() {
                             @Override
                             public void onClick(int pos) {
-                                // TODO: onDelete
+                                System.out.println("Click edit: "+SwipeHelper.getSwipedPos());
+                                if(!SwipeHelper.getISTOUCH()){
+                                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                                }
                             }
                         }
                 ));
             }
-            };
+        };
 
 
         custom_adapter = new custom_adapter(mainTypeViewModel);
@@ -120,14 +123,17 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 if (isMultiSelect)
                     multi_select(position);
 
-                if(!SwipeHelper.IS_TOUCH){
-                    swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+                if(!SwipeHelper.getISTOUCH() && SwipeHelper.getSwipedPos()!=-1){
+                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
                 }
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if (!isMultiSelect && !SwipeHelper.IS_TOUCH) {
+                if(!SwipeHelper.getISTOUCH()){
+                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                }
+                if (!isMultiSelect && !SwipeHelper.getISTOUCH()) {
 
                     custom_adapter.clear_selected_item();
                     isMultiSelect = true;
@@ -318,8 +324,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     et_folder_name.getText().toString(), current_level));
             custom_adapter.add_element(ins);
 
-            if(!SwipeHelper.IS_TOUCH){
-                swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+            if(!SwipeHelper.getISTOUCH()){
+                swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
             }
         }
         else if(from==3){
@@ -344,8 +350,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
             view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
 
-            if(!SwipeHelper.IS_TOUCH){
-                swipeHelper.reset_swipe(SwipeHelper.swipedPos);
+            if(!SwipeHelper.getISTOUCH()){
+                swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
             }
         }
     }

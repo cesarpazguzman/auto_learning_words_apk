@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -28,10 +29,10 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     public static final int BUTTON_WIDTH = 150;
     private RecyclerView recyclerView;
     private GestureDetector gestureDetector;
-    public static int swipedPos = -1;
-    private int oldPos = -1;
+    private static int swipedPos = -1;
+    private static int oldPos = -1;
     private Queue<Integer> recoverQueue;
-    public static boolean IS_TOUCH = false;
+    private static boolean IS_TOUCH = false;
     private Map<Integer, List<UnderlayButton>> buttonsBuffer;
     private List<UnderlayButton> buttons;
 
@@ -52,6 +53,18 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         }
     };
 
+    public static void setSwipedPos(int value){
+        swipedPos = value;
+    }
+
+    public static void setISTOUCH(boolean value){
+        IS_TOUCH = value;
+    }
+
+    public static int getSwipedPos(){ return swipedPos;}
+    public static boolean getISTOUCH(){return IS_TOUCH;}
+
+
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View view, MotionEvent e) {
@@ -70,10 +83,10 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
                     }
                     else if (rect.top < point.y && rect.bottom > point.y){
                         gestureDetector.onTouchEvent(e);
+
                     }
                     else {
                         reset_swipe(swipedPos);
-
                     }
                 }
             }
@@ -83,7 +96,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public void reset_swipe(int swipedPos2){
         recoverQueue.add(swipedPos2);
-        swipedPos = -1;
+        setSwipedPos(-1);
         oldPos = -1;
         recoverSwipedItem();
     }
@@ -93,7 +106,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         this.recyclerView = recyclerView;
         this.gestureDetector = new GestureDetector(context, gestureListener);
         this.recyclerView.setOnTouchListener(onTouchListener);
-        this.recyclerView.getItemAnimator().setChangeDuration(0);
+        recyclerView.getItemAnimator().setChangeDuration(350);
         buttonsBuffer = new HashMap<>();
         this.buttons = new ArrayList<>();
         recoverQueue = new LinkedList<Integer>(){
@@ -117,7 +130,8 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
         oldPos = swipedPos;
-        swipedPos = viewHolder.getAdapterPosition();
+        setSwipedPos(viewHolder.getAdapterPosition());
+
         recoverQueue.add(oldPos);
 
         if (buttonsBuffer.containsKey(swipedPos))
@@ -128,6 +142,9 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         buttonsBuffer.clear();
 
         recoverSwipedItem();
+
+
+
     }
 
     @Override
@@ -146,8 +163,13 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         float translationX = dX;
         View itemView = viewHolder.itemView;
 
-        if (pos < 0 || pos == swipedPos){
-            swipedPos = pos;
+        if(pos == oldPos) {
+            SwipeHelper.setISTOUCH(false);
+            return;
+        }
+        if (pos < 0){
+            setSwipedPos(pos);
+            SwipeHelper.setISTOUCH(false);
             return;
         }
 
@@ -163,7 +185,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
                     buffer = buttonsBuffer.get(pos);
                 }
                 translationX = dX * 1 * BUTTON_WIDTH / itemView.getWidth();
-                SwipeHelper.IS_TOUCH = true;
+                SwipeHelper.setISTOUCH(true);
                 drawButtons(c, itemView, buffer, pos, translationX);
             }
         }
@@ -198,13 +220,13 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public static class UnderlayButton {
         private String text;
-        private int imageResId;
+        private Drawable imageResId;
         private int color;
         private int pos;
         private RectF clickRegion;
         private UnderlayButtonClickListener clickListener;
 
-        public UnderlayButton(String text, int imageResId, int color, UnderlayButtonClickListener clickListener) {
+        public UnderlayButton(String text, Drawable imageResId, int color, UnderlayButtonClickListener clickListener) {
             this.text = text;
             this.imageResId = imageResId;
             this.color = color;
@@ -225,26 +247,19 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
             // Draw background
             p.setColor(color);
-            c.drawRect(rect, p);
+            c.drawRect(new Rect((int)(rect.left*0.5f),(int)(rect.top*0.5f),(int)(rect.right*0.5f),(int)(rect.bottom*0.5f)), p);
 
-            // Draw Text
-            p.setColor(Color.parseColor("#7298d1"));
-            p.setTextSize(60);
-
-            Rect r = new Rect();
-            float cHeight = rect.height();
-            float cWidth = rect.width();
-            p.setTextAlign(Paint.Align.LEFT);
-            p.getTextBounds(text, 0, text.length(), r);
-            float x = cWidth / 2f - r.width() / 2f - r.left;
-            float y = cHeight / 2f + r.height() / 2f - r.bottom;
-            c.drawText(text, rect.left + x, rect.top + y, p);
+            imageResId.setBounds((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
+            imageResId.draw(c);
 
             clickRegion = rect;
             this.pos = pos;
         }
     }
 
+    /*public static void setSwipedPos(int value){
+        swipedPos = value;
+    }*/
     private synchronized void recoverSwipedItem(){
         while (!recoverQueue.isEmpty()){
             int pos = recoverQueue.poll();
@@ -258,9 +273,9 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    SwipeHelper.IS_TOUCH = false;
+                    SwipeHelper.setISTOUCH(false);
                 }
-            }, 250);
+            }, 350);
         }
 
 
