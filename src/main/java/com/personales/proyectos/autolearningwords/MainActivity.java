@@ -134,13 +134,16 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     multi_select(position);
 
                 if(!SwipeHelper.getISTOUCH() && SwipeHelper.getSwipedPos()!=-1){
-                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                    if(SwipeHelper.getSwipedPos() != SwipeHelper.oldPos)
+                        swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                    swipeHelper.reset_swipe(-1);
+
                 }
             }
 
             @Override
             public void onItemLongClick(View view, int position) {
-                if(!SwipeHelper.getISTOUCH()){
+                if(!SwipeHelper.getISTOUCH() && SwipeHelper.getSwipedPos()!=-1){
                     swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
                 }
 

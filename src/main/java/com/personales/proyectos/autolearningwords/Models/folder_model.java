@@ -31,6 +31,7 @@ public class folder_model implements itemVisitable {
         return parent_id;
     }
 
+    public boolean get_expanded(){ return false; }
     @Override
     public int[] type(TypeViewModelFactory typeViewModelFactory) {
         return new int[]{typeViewModelFactory.type(this),itemVisitable.FOLDER};

@@ -15,6 +15,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
 import com.personales.proyectos.autolearningwords.R;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     private RecyclerView recyclerView;
     private GestureDetector gestureDetector;
     private static int swipedPos = -1;
-    private static int oldPos = -1;
+    public static int oldPos = -1;
     private Queue<Integer> recoverQueue;
     private static boolean IS_TOUCH = false;
     private Map<Integer, List<UnderlayButton>> buttonsBuffer;
@@ -85,6 +86,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
                     else {
                         reset_swipe(swipedPos);
                     }
+                    return true;
                 }
             }
 
@@ -126,6 +128,10 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         return false;
+    }
+
+    public boolean is_expanded(int position){
+        return ((custom_adapter)(recyclerView.getAdapter())).get_viewModels().get(position).get_expanded();
     }
 
     @Override

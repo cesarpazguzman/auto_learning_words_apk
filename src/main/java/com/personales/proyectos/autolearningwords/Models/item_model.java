@@ -6,6 +6,7 @@ import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 public class item_model implements itemVisitable {
     private int id, folder_id;
     private String original, translation, comment, example1, example2;
+    public boolean expanded = false;
 
     public item_model(int id, String original, String translation, int folder_id, String comment,
                       String example1, String example2) {
@@ -46,6 +47,9 @@ public class item_model implements itemVisitable {
         return example2;
     }
 
+    public boolean get_expanded(){
+        return expanded;
+    }
     @Override
     public int[] type(TypeViewModelFactory typeViewModelFactory) {
         return new int[]{typeViewModelFactory.type(this),itemVisitable.ITEM};

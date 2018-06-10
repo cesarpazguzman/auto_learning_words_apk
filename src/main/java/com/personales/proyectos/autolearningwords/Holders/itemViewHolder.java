@@ -21,7 +21,6 @@ public class itemViewHolder extends baseViewHolder<item_model> {
     public static final int LAYOUT = R.layout.item_main;
     private item_model viewModel;
     private Context context;
-    private Boolean expanded = false;
 
     @BindView(R.id.item_original)TextView item_name;
     @BindView(R.id.item_traduccion)TextView item_traduccion;
@@ -40,7 +39,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
     @Override
     public void bind(item_model element) {
         this.viewModel = element;
-
+        viewModel.expanded = false;
         item_name.setText(viewModel.getName());
         item_traduccion.setText(viewModel.getTranslation());
         txt_examples_item.setText(text_examples());
@@ -93,23 +92,24 @@ public class itemViewHolder extends baseViewHolder<item_model> {
         public void onClick(View v) {
             //Si no está en eliminado conjunto:
             System.out.println("collapse: "+baseViewHolder.MULTISELECT_ACTIVED+" pos: "+SwipeHelper.getSwipedPos());
-            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1){
+            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1 ){
+                SwipeHelper.setISTOUCH(false);
                 bt_expand_item.setVisibility(
-                        expanded ?
+                        viewModel.expanded ?
                                 View.VISIBLE :
                                 View.GONE);
 
                 bt_collapse_item.setVisibility(
-                        expanded ?
+                        viewModel.expanded ?
                                 View.GONE :
                                 View.VISIBLE);
 
                 txt_examples_item.setVisibility(
-                        expanded ?
+                        viewModel.expanded ?
                                 View.GONE :
                                 View.VISIBLE);
 
-                expanded = !expanded;
+                viewModel.expanded = !viewModel.expanded;
             }
         }
     };
