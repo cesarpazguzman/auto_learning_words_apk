@@ -3,13 +3,9 @@ package com.personales.proyectos.autolearningwords.Models;
 import com.personales.proyectos.autolearningwords.Interfaces.TypeViewModelFactory;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 
-import java.util.Comparator;
-
 public class folder_model implements itemVisitable {
-    private int id;
+    private int id, parent_id;
     private String name;
-    private int parent_id;
-
 
     public folder_model(int id, String name, int parent_id) {
         this.id = id;
@@ -36,17 +32,7 @@ public class folder_model implements itemVisitable {
     }
 
     @Override
-    public int type(TypeViewModelFactory typeViewModelFactory) {
-        return typeViewModelFactory.type(this);
-    }
-
-    @Override
-    public Integer order() {
-        return itemVisitable.FOLDER;
-    }
-
-    @Override
-    public int type() {
-        return itemVisitable.FOLDER;
+    public int[] type(TypeViewModelFactory typeViewModelFactory) {
+        return new int[]{typeViewModelFactory.type(this),itemVisitable.FOLDER};
     }
 }

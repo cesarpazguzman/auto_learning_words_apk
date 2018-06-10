@@ -44,7 +44,9 @@ import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 
@@ -103,15 +105,17 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         };
 
 
-        custom_adapter = new custom_adapter(mainTypeViewModel);
+        custom_adapter = new custom_adapter(mainTypeViewModel,this);
         rv_folders.setAdapter(custom_adapter);
 
         Intent intent = getIntent();
         if(intent.hasExtra(folderViewHolder.EXTRA_PARENTID)){
             current_level = intent.getIntExtra(folderViewHolder.EXTRA_PARENTID,current_level);
         }
-        ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
-        view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
+
+        ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
+        view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
+
         custom_adapter.updateListView(view_ids);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(current_level!=0);
@@ -257,9 +261,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     @Override
     public void onPositiveClick(int from, View view) {
-        final tableInterface folder_table = db_manager.get_table_instance("folder");
-        final tableInterface item_table = db_manager.get_table_instance("item");
-
         if(from==1)
         {
             if(custom_adapter.get_selected_items().size()>0)
@@ -268,9 +269,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     custom_adapter.remove_element(custom_adapter.get_selected_items().get(i));
                 }
 
-                final ArrayList<itemVisitable> aux= new ArrayList<itemVisitable>();
-
-                aux.addAll(custom_adapter.get_selected_items());
+                final ArrayList<itemVisitable> selecte_items_aux = custom_adapter.get_selected_items();
 
                 String message = " eliminado";
                 if(custom_adapter.get_selected_items().size()>1){
@@ -284,13 +283,13 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     public void onDismissed(Snackbar snackbar, int event) {
                         //Si no se marcó deshacer, se elimina entonces de la base de datos
                         if(event != Snackbar.Callback.DISMISS_EVENT_ACTION) {
-                            for (int i = 0; i < aux.size(); i++) {
-                                itemVisitable it = aux.get(i);
-                                if (it.type() == itemVisitable.FOLDER) {
-                                    folder_table.delete(it.getId());
-                                } else if (it.type() == itemVisitable.ITEM) {
-                                    item_table.delete(it.getId());
-                                }
+                            for (int i = 0; i < selecte_items_aux.size(); i++) {
+                                itemVisitable it = selecte_items_aux.get(i);
+                                int type = it.type(mainTypeViewModel)[1];
+                                if(type == itemVisitable.ITEM)
+                                    db_manager.delete(item.NAME_TABLE, it.getId());
+                                else if(type == itemVisitable.FOLDER)
+                                    db_manager.delete(folder.NAME_TABLE, it.getId());
                             }
                         }
                     }
@@ -303,8 +302,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 snackbar.setAction("DESHACER ", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        for(int i=0;i<aux.size();i++){
-                            itemVisitable it = aux.get(i);
+                        for(int i=0;i<selecte_items_aux.size();i++){
+                            itemVisitable it = selecte_items_aux.get(i);
                             custom_adapter.add_element(it);
                         }
                     }
@@ -320,8 +319,12 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             }
         }else if(from==2){
             EditText et_folder_name = view.findViewById(R.id.et_item_original);
-            itemVisitable ins = folder_table.insert(((folder)folder_table).values(
-                    et_folder_name.getText().toString(), current_level));
+            Map<String, Object> vals = new HashMap<>();
+            vals.put(folder.col.NAME, et_folder_name.getText().toString());
+            vals.put(folder.col.PARENT_ID, current_level);
+
+            itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
+
             custom_adapter.add_element(ins);
 
             if(!SwipeHelper.getISTOUCH()){
@@ -339,16 +342,21 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             String example1 = !et_example_one.getText().toString().isEmpty() ? et_example_one.getText().toString() : "";
             String example2 = !et_example_two.getText().toString().isEmpty() ? et_example_two.getText().toString() : "";
 
-            itemVisitable ins = item_table.insert(((item)item_table).values(
-                    et_item_original.getText().toString(),
-                    et_item_traduccion.getText().toString(), current_level,
-                    comment,example1,
-                    example2));
+            Map<String, Object> vals = new HashMap<>();
+            vals.put(item.col.ORIGINAL, et_item_original.getText().toString());
+            vals.put(item.col.TRANSLATION, et_item_traduccion.getText().toString());
+            vals.put(item.col.FOLDER_ID, current_level);
+            vals.put(item.col.COMMENT, comment);
+            vals.put(item.col.EXAMPLE1, example1);
+            vals.put(item.col.EXAMPLE2, example2);
+
+            itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
+
             custom_adapter.add_element(ins);
 
 
-            ArrayList<itemVisitable> view_ids = ((folder)db_manager.get_table_instance("folder")).getAllFolders(current_level);
-            view_ids.addAll(((item)db_manager.get_table_instance("item")).getAllFolders(current_level));
+            ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
+            view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
 
             if(!SwipeHelper.getISTOUCH()){
                 swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());

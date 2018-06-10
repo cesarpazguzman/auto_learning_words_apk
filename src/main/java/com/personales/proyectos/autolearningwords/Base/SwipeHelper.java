@@ -249,12 +249,6 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         }
 
         public void onDraw(Canvas c, RectF rect, int pos){
-            Paint p = new Paint();
-
-            // Draw background
-            p.setColor(color);
-            c.drawRect(new Rect((int)(rect.left*0.5f),(int)(rect.top*0.5f),(int)(rect.right*0.5f),(int)(rect.bottom*0.5f)), p);
-
             imageResId.setBounds((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
             imageResId.draw(c);
 

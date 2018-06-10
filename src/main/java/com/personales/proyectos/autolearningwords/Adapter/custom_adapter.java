@@ -1,5 +1,6 @@
 package com.personales.proyectos.autolearningwords.Adapter;
 
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -21,10 +22,14 @@ import java.util.List;
 public class custom_adapter extends multi_select_adapter{
     private List<itemVisitable> viewModels;
     private TypeViewModelFactory typeViewModelFactory;
+    private Context context;
 
-    public custom_adapter(TypeViewModelFactory typeViewModelFactory){
+    public custom_adapter(TypeViewModelFactory typeViewModelFactory, Context context){
+        super(typeViewModelFactory, context);
+
         this.viewModels = new ArrayList<>();
         this.typeViewModelFactory = typeViewModelFactory;
+        this.context= context;
     }
 
     public void updateListView(List<itemVisitable> viewModels){
@@ -36,8 +41,8 @@ public class custom_adapter extends multi_select_adapter{
     public void add_element(itemVisitable item){
         boolean inserted = false;
         for(int i=0;i<viewModels.size();++i){
-            if(viewModels.get(i).order()==item.order()){
-                if(viewModels.get(i).getName().compareTo(item.getName().toUpperCase())>0){
+            if(viewModels.get(i).type(typeViewModelFactory)[1]==item.type(typeViewModelFactory)[1]){
+                if(viewModels.get(i).getName().toUpperCase().compareTo(item.getName().toUpperCase())>0){
                     this.viewModels.add(i,item);
                     notifyItemInserted(i);
                     inserted = true;
@@ -59,7 +64,7 @@ public class custom_adapter extends multi_select_adapter{
 
     @Override
     public int getItemViewType(int position) {
-        return viewModels.get(position).type(typeViewModelFactory);
+        return viewModels.get(position).type(typeViewModelFactory)[0];
     }
 
     public List<itemVisitable> get_viewModels(){
@@ -117,7 +122,7 @@ public class custom_adapter extends multi_select_adapter{
 
         public int compare(itemVisitable s1, itemVisitable s2) {
             //Se ordena primero por tipo
-            if(s1.order()==s2.order()){
+            if(s1.type(typeViewModelFactory)[1]==s2.type(typeViewModelFactory)[1]){
                 //Y luego por nombre
                 String name1 = s1.getName().toUpperCase();
                 String name2 = s2.getName().toUpperCase();
@@ -125,7 +130,7 @@ public class custom_adapter extends multi_select_adapter{
                 return name1.compareTo(name2);
             }
 
-            return s1.order().compareTo(s2.order());
+            return ((Integer)s1.type(typeViewModelFactory)[1]).compareTo(s2.type(typeViewModelFactory)[1]);
         }
     };
 }

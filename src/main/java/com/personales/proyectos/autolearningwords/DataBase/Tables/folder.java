@@ -35,13 +35,6 @@ public class folder implements tableInterface {
             "_index ON "+NAME_TABLE+"("+col.PARENT_ID+")";
 
 
-    public ContentValues values(String name, int parent){
-        ContentValues values = new ContentValues();
-        values.put(col.NAME, name);
-        values.put(col.PARENT_ID, parent);
-        return values;
-    }
-
     public itemVisitable insert(ContentValues vals){
         db.insert(NAME_TABLE, null, vals);
 
@@ -69,7 +62,7 @@ public class folder implements tableInterface {
                 col.ID+"=?",where);
     }
 
-    public ArrayList<itemVisitable> getAllFolders(int parent) {
+    public ArrayList<itemVisitable> get_all_elements(int parent) {
         ArrayList<itemVisitable> listItems = new ArrayList<itemVisitable>();
 
         String sql = "SELECT * from " + NAME_TABLE;
@@ -92,11 +85,4 @@ public class folder implements tableInterface {
         return listItems;
     }
 
-
-
-    /*public Cursor cargarCursorFolders(){
-        String[] columnas = new String[]{T1.ID, T1.NAME, T1.PARENT_ID};
-
-        return db.query(T1.NAME_TABLE, columnas, null, null, null, null, null);
-    }*/
 }
