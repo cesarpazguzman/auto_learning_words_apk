@@ -92,6 +92,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
     private View.OnClickListener collapse_expand_listener = new View.OnClickListener() {
         public void onClick(View v) {
             //Si no está en eliminado conjunto:
+            System.out.println("collapse: "+baseViewHolder.MULTISELECT_ACTIVED+" pos: "+SwipeHelper.getSwipedPos());
             if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1){
                 bt_expand_item.setVisibility(
                         expanded ?

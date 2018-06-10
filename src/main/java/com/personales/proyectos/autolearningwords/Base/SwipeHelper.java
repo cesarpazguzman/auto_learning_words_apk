@@ -46,11 +46,6 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
             return false;
         }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
     };
 
     public static void setSwipedPos(int value){
@@ -59,6 +54,8 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public static void setISTOUCH(boolean value){
         IS_TOUCH = value;
+        if(value)
+            baseViewHolder.MULTISELECT_ACTIVED = false;
     }
 
     public static int getSwipedPos(){ return swipedPos;}
@@ -77,7 +74,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
                 View swipedItem = swipedViewHolder.itemView;
                 Rect rect = new Rect();
                 swipedItem.getGlobalVisibleRect(rect);
-                if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_UP ||e.getAction() == MotionEvent.ACTION_MOVE) {
+                if (e.getAction() == MotionEvent.ACTION_MOVE) {
                     if ( swipedPos==oldPos){
                         reset_swipe(-1);
                     }
@@ -89,6 +86,10 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
                         reset_swipe(swipedPos);
                     }
                 }
+            }
+
+            if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_UP) {
+                setISTOUCH(false);
             }
             return false;
         }
@@ -163,6 +164,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
             super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
             setISTOUCH(false);
+            setSwipedPos(-1);
             return;
         }
         int pos = viewHolder.getAdapterPosition();

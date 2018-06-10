@@ -120,8 +120,14 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(current_level!=0);
 
-        rv_folders.addOnItemTouchListener(new RecyclerItemClickListener(this, rv_folders,
-                new RecyclerItemClickListener.OnItemClickListener() {
+        rv_folders.addOnItemTouchListener(new RecyclerItemClickListener(
+                this,
+                rv_folders,
+                get_item_click_listener()));
+    }
+
+    private RecyclerItemClickListener.OnItemClickListener get_item_click_listener(){
+        return new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 if (isMultiSelect)
@@ -137,7 +143,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 if(!SwipeHelper.getISTOUCH()){
                     swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
                 }
-                if (!isMultiSelect && !SwipeHelper.getISTOUCH()) {
+
+                if (!isMultiSelect) {
 
                     custom_adapter.clear_selected_item();
                     isMultiSelect = true;
@@ -150,9 +157,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 multi_select(position);
 
             }
-        }));
+        };
     }
-
     private void multi_select(int position) {
         if (mActionMode != null) {
             if (custom_adapter.get_selected_items().contains(custom_adapter.get_viewModels().get(position)))

@@ -39,6 +39,9 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
 
     public void remove_selected_item(itemVisitable item){
         selected_items.remove(item);
+
+        if(selected_items.size()==0)
+            baseViewHolder.MULTISELECT_ACTIVED = false;
     }
 
     public void clear_selected_item(){
