@@ -159,6 +159,12 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     @Override
     public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        if (dY != 0 && dX == 0){
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            setISTOUCH(false);
+            return;
+        }
         int pos = viewHolder.getAdapterPosition();
         float translationX = dX;
         View itemView = viewHolder.itemView;

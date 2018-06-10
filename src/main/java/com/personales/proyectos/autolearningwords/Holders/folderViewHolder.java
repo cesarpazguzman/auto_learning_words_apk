@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
 import com.personales.proyectos.autolearningwords.MainActivity;
 import com.personales.proyectos.autolearningwords.Models.folder_model;
@@ -41,10 +42,12 @@ public class folderViewHolder extends baseViewHolder<folder_model> {
         this.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Cambio de elementos en la lista
-                Intent intent = new Intent(context, MainActivity.class);
-                intent.putExtra(EXTRA_PARENTID, viewModel.getId());
-                context.startActivity(intent);
+                if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1){
+                    //Cambio de elementos en la lista
+                    Intent intent = new Intent(context, MainActivity.class);
+                    intent.putExtra(EXTRA_PARENTID, viewModel.getId());
+                    context.startActivity(intent);
+                }
             }
         });
     }
