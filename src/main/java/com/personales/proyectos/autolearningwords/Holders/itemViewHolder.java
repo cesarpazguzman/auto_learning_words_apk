@@ -1,7 +1,9 @@
 package com.personales.proyectos.autolearningwords.Holders;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.View;
@@ -9,6 +11,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
+import com.personales.proyectos.autolearningwords.Base.RecyclerItemClickListener;
 import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
 import com.personales.proyectos.autolearningwords.Models.item_model;
@@ -29,6 +33,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
     @BindView(R.id.bt_expand_item)ImageButton bt_expand_item;
     @BindView(R.id.cl_button_expand)FrameLayout cl_button_expand;
     @BindView(R.id.card_item)CardView card_item;
+    @BindView(R.id.cl_examples_item)ConstraintLayout cl_examples_item;
 
     public itemViewHolder(View itemView){
         super(itemView);
@@ -90,8 +95,6 @@ public class itemViewHolder extends baseViewHolder<item_model> {
 
     private View.OnClickListener collapse_expand_listener = new View.OnClickListener() {
         public void onClick(View v) {
-            //Si no está en eliminado conjunto:
-            System.out.println("collapse: "+baseViewHolder.MULTISELECT_ACTIVED+" pos: "+SwipeHelper.getSwipedPos());
             if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1 ){
                 SwipeHelper.setISTOUCH(false);
                 bt_expand_item.setVisibility(
@@ -104,7 +107,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
                                 View.GONE :
                                 View.VISIBLE);
 
-                txt_examples_item.setVisibility(
+                cl_examples_item.setVisibility(
                         viewModel.expanded ?
                                 View.GONE :
                                 View.VISIBLE);
@@ -113,5 +116,4 @@ public class itemViewHolder extends baseViewHolder<item_model> {
             }
         }
     };
-
 }

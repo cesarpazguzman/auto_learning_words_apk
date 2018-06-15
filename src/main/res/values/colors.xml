@@ -13,4 +13,5 @@
     <color name="list_item_normal_state">#FFFFFF</color>
 
     <color name="color_links">#0000FF</color>
+    <color name="color_examples_background">#E0F7FA</color>
 </resources>

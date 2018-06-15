@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
@@ -41,11 +42,12 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             for (UnderlayButton button : buttons){
+                System.out.println("ENTRA3");
                 if(button.onClick(e.getX(), e.getY()))
                     break;
             }
 
-            return false;
+            return true;
         }
     };
 
@@ -92,6 +94,8 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
             if (e.getAction() == MotionEvent.ACTION_DOWN || e.getAction() == MotionEvent.ACTION_UP) {
                 setISTOUCH(false);
+                if(e.getAction() == MotionEvent.ACTION_UP)
+                    gestureListener.onSingleTapConfirmed(e);
             }
             return false;
         }
@@ -234,13 +238,13 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
 
     public static class UnderlayButton {
         private String text;
-        private Drawable imageResId;
+        private int imageResId;
         private int color;
         private int pos;
         private RectF clickRegion;
         private UnderlayButtonClickListener clickListener;
 
-        public UnderlayButton(String text, Drawable imageResId, int color, UnderlayButtonClickListener clickListener) {
+        public UnderlayButton(String text, int imageResId, int color, UnderlayButtonClickListener clickListener) {
             this.text = text;
             this.imageResId = imageResId;
             this.color = color;
@@ -248,6 +252,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         }
 
         public boolean onClick(float x, float y){
+            System.out.println("ENTRA2");
             if (clickRegion != null && clickRegion.contains(x, y)){
                 clickListener.onClick(pos);
                 return true;
@@ -257,9 +262,24 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         }
 
         public void onDraw(Canvas c, RectF rect, int pos){
-            imageResId.setBounds((int)rect.left, (int)rect.top, (int)rect.right, (int)rect.bottom);
-            imageResId.draw(c);
+            Paint p = new Paint();
 
+            // Draw background
+            p.setColor(color);
+            c.drawRect(rect, p);
+
+            // Draw Text
+            p.setColor(Color.parseColor("#7298d1"));
+            p.setTextSize(40);
+            p.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+            Rect r = new Rect();
+            float cHeight = rect.height();
+            float cWidth = rect.width();
+            p.setTextAlign(Paint.Align.LEFT);
+            p.getTextBounds(text, 0, text.length(), r);
+            float x = cWidth / 2f - r.width() / 2f - r.left;
+            float y = cHeight / 2f + r.height() / 2f - r.bottom;
+            c.drawText(text, rect.left + x, rect.top + y, p);
             clickRegion = rect;
             this.pos = pos;
         }

@@ -1,23 +1,14 @@
 package com.personales.proyectos.autolearningwords;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
-import android.text.InputType;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.MenuInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,12 +16,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.personales.proyectos.autolearningwords.Activity.BaseActivity;
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
-import com.personales.proyectos.autolearningwords.Base.AlertDialogHelper;
+import com.personales.proyectos.autolearningwords.Dialogs.AlertDialogHelper;
 import com.personales.proyectos.autolearningwords.Base.RecyclerItemClickListener;
 import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
@@ -38,10 +27,8 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
-import com.personales.proyectos.autolearningwords.Interfaces.tableInterface;
+import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -88,16 +75,24 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             @Override
             public void instantiateUnderlayButton(RecyclerView.ViewHolder viewHolder, List<UnderlayButton> underlayButtons) {
                 underlayButtons.add(new SwipeHelper.UnderlayButton(
-                        "",
-                        getResources().getDrawable(R.drawable.ic_edit_black_24dp),
-                        Color.parseColor("#223a60"),
+                        "EDIT",
+                        0,
+                        Color.parseColor("#ebebeb"),
                         new SwipeHelper.UnderlayButtonClickListener() {
                             @Override
                             public void onClick(int pos) {
-                                System.out.println("Click edit: "+SwipeHelper.getSwipedPos());
-                                if(!SwipeHelper.getISTOUCH()){
-                                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                                itemVisitable item = custom_adapter.get_viewModels().get(pos);
+                                System.out.println("ENTRA");
+                                if(item.type(mainTypeViewModel)[1]==itemVisitable.ITEM){
+                                    item_model it = (item_model)item;
+                                    add_element_dialog(it.getName(), it.getTranslation(),
+                                            it.getExample1(), it.getExample2(), it.getComment());
+                                }else if(item.type(mainTypeViewModel)[1]==itemVisitable.FOLDER){
+
                                 }
+                                if(SwipeHelper.getSwipedPos() != SwipeHelper.oldPos)
+                                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                                swipeHelper.reset_swipe(-1);
                             }
                         }
                 ));
@@ -144,7 +139,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             @Override
             public void onItemLongClick(View view, int position) {
                 if(!SwipeHelper.getISTOUCH() && SwipeHelper.getSwipedPos()!=-1){
-                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                    if(SwipeHelper.getSwipedPos() != SwipeHelper.oldPos)
+                        swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                    swipeHelper.reset_swipe(-1);
+
                 }
 
                 if (!isMultiSelect) {
@@ -206,21 +204,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                             break;
 
                         case R.id.add_item:
-                            inflater = MainActivity.this.getLayoutInflater();
-                            view = inflater.inflate(R.layout.dialog_item, null);
-                            ImageButton add_example_item = view.findViewById(R.id.add_example_item);
-                            final EditText et_example_two = view.findViewById(R.id.et_example_two);
-                            add_example_item.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View view) {
-                                    et_example_two.setVisibility(View.VISIBLE);
-                                    et_example_two.requestFocus();
-                                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                                }
-                            });
-
-                            alertDialogHelper.showAlertDialog("","",
-                            "ACEPTAR","CANCELAR", 3, true, view);
+                            add_element_dialog();
                             break;
                     }
                     return false;
@@ -232,6 +216,42 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         return super.onOptionsItemSelected(item);
     }
 
+    private void add_element_dialog(){
+        add_element_dialog("","","","","");
+    }
+
+    private void add_element_dialog(String p_original, String p_traduccion,
+                                    String example_1, String example_2, String p_comment){
+        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
+        View view = inflater.inflate(R.layout.dialog_item, null);
+        final ImageButton add_example_item = view.findViewById(R.id.add_example_item);
+        final EditText et_item_original = view.findViewById(R.id.et_item_original);
+        et_item_original.setText(p_original);
+        final EditText et_item_traduccion = view.findViewById(R.id.et_item_traduccion);
+        et_item_traduccion.setText(p_traduccion);
+        final EditText et_example_one = view.findViewById(R.id.et_example_one);
+        et_example_one.setText(example_1);
+        final EditText et_example_two = view.findViewById(R.id.et_example_two);
+        et_example_two.setText(example_2);
+        if(!example_2.isEmpty()){
+            et_example_two.setVisibility(View.VISIBLE);
+            add_example_item.setVisibility(View.GONE);
+        }
+        final EditText et_comments = view.findViewById(R.id.et_comments);
+        et_comments.setText(p_comment);
+        add_example_item.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                et_example_two.setVisibility(View.VISIBLE);
+                et_example_two.requestFocus();
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+                add_example_item.setVisibility(View.GONE);
+            }
+        });
+
+        alertDialogHelper.showAlertDialog("","",
+                "ACEPTAR","CANCELAR", 3, true, view);
+    }
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         @Override

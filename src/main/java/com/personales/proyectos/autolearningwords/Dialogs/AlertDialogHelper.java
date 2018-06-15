@@ -1,4 +1,4 @@
-package com.personales.proyectos.autolearningwords.Base;
+package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
