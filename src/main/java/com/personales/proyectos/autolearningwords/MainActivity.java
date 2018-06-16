@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.view.ActionMode;
@@ -25,6 +26,7 @@ import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
+import com.personales.proyectos.autolearningwords.Dialogs.item_dialog;
 import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Models.item_model;
@@ -37,7 +39,8 @@ import java.util.Map;
 
 import butterknife.BindView;
 
-public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener{
+public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
+                                                          item_dialog.ItemDialogListener{
 
     private custom_adapter custom_adapter;
     @BindView(R.id.rv_general) RecyclerView rv_folders;
@@ -64,7 +67,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
         mainTypeViewModel = new mainTypeViewModel();
         alertDialogHelper =new AlertDialogHelper(this);
-        db_manager = new databaseManager(this);
+        db_manager = databaseManager.getInstance(this);
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -217,40 +220,19 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     }
 
     private void add_element_dialog(){
-        add_element_dialog("","","","","");
+        FragmentManager fm = getSupportFragmentManager();
+        item_dialog item_dialog_frag = item_dialog.newInstance();
+        item_dialog_frag.show(fm, "new_item_dialog");
+
     }
 
-    private void add_element_dialog(String p_original, String p_traduccion,
-                                    String example_1, String example_2, String p_comment){
-        LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_item, null);
-        final ImageButton add_example_item = view.findViewById(R.id.add_example_item);
-        final EditText et_item_original = view.findViewById(R.id.et_item_original);
-        et_item_original.setText(p_original);
-        final EditText et_item_traduccion = view.findViewById(R.id.et_item_traduccion);
-        et_item_traduccion.setText(p_traduccion);
-        final EditText et_example_one = view.findViewById(R.id.et_example_one);
-        et_example_one.setText(example_1);
-        final EditText et_example_two = view.findViewById(R.id.et_example_two);
-        et_example_two.setText(example_2);
-        if(!example_2.isEmpty()){
-            et_example_two.setVisibility(View.VISIBLE);
-            add_example_item.setVisibility(View.GONE);
-        }
-        final EditText et_comments = view.findViewById(R.id.et_comments);
-        et_comments.setText(p_comment);
-        add_example_item.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                et_example_two.setVisibility(View.VISIBLE);
-                et_example_two.requestFocus();
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-                add_example_item.setVisibility(View.GONE);
-            }
-        });
+    private void add_element_dialog(String original, String traduccion,
+                                    String example_1, String example_2, String comment){
 
-        alertDialogHelper.showAlertDialog("","",
-                "ACEPTAR","CANCELAR", 3, true, view);
+        FragmentManager fm = getSupportFragmentManager();
+        item_dialog item_dialog_frag = item_dialog.newInstance(original, traduccion, example_1,
+                example_2, comment);
+        item_dialog_frag.show(fm, "modify_item_dialog");
     }
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
@@ -360,37 +342,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
             }
         }
-        else if(from==3){
-            EditText et_item_original = view.findViewById(R.id.et_item_original);
-            EditText et_item_traduccion = view.findViewById(R.id.et_item_traduccion);
-            EditText et_example_one = view.findViewById(R.id.et_example_one);
-            EditText et_example_two = view.findViewById(R.id.et_example_two);
-            EditText et_comments = view.findViewById(R.id.et_comments);
-
-            String comment = !et_comments.getText().toString().isEmpty() ? et_comments.getText().toString() : "";
-            String example1 = !et_example_one.getText().toString().isEmpty() ? et_example_one.getText().toString() : "";
-            String example2 = !et_example_two.getText().toString().isEmpty() ? et_example_two.getText().toString() : "";
-
-            Map<String, Object> vals = new HashMap<>();
-            vals.put(item.col.ORIGINAL, et_item_original.getText().toString());
-            vals.put(item.col.TRANSLATION, et_item_traduccion.getText().toString());
-            vals.put(item.col.FOLDER_ID, current_level);
-            vals.put(item.col.COMMENT, comment);
-            vals.put(item.col.EXAMPLE1, example1);
-            vals.put(item.col.EXAMPLE2, example2);
-
-            itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
-
-            custom_adapter.add_element(ins);
-
-
-            ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
-            view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
-
-            if(!SwipeHelper.getISTOUCH()){
-                swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
-            }
-        }
     }
 
     @Override
@@ -403,5 +354,31 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     }
 
+    @Override
+    public void onSaveItemDialog(String original, String traduccion, String example1, String example2,
+                                 String comment, boolean open_again) {
+        Map<String, Object> vals = new HashMap<>();
+        vals.put(item.col.ORIGINAL, original);
+        vals.put(item.col.TRANSLATION, traduccion);
+        vals.put(item.col.FOLDER_ID, current_level);
+        vals.put(item.col.COMMENT, comment);
+        vals.put(item.col.EXAMPLE1, example1);
+        vals.put(item.col.EXAMPLE2, example2);
 
+        itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
+
+        custom_adapter.add_element(ins);
+
+
+        ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
+        view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
+
+        if(!SwipeHelper.getISTOUCH()){
+            swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+        }
+
+        if(open_again){
+            add_element_dialog();
+        }
+    }
 }

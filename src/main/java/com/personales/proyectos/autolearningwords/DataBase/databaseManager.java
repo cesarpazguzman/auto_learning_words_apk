@@ -22,10 +22,10 @@ public class databaseManager {
 
     private databaseHelper helper;
     private SQLiteDatabase db;
-
+    private static databaseManager _instance = null;
     private HashMap<String, tableInterface> tables;
 
-    public databaseManager(Context context) {
+    private databaseManager(Context context) {
         //BASE DE DATOS
         helper = new databaseHelper(context);
         db = helper.getWritableDatabase();
@@ -33,6 +33,13 @@ public class databaseManager {
         tables = new HashMap<String, tableInterface>();
 
         instance_all_tables();
+    }
+
+    public static databaseManager getInstance(final Context context){
+        if(_instance==null){
+            _instance = new databaseManager(context);
+        }
+        return _instance;
     }
 
     private ContentValues values(Map<String, Object> vals) {
