@@ -36,4 +36,12 @@ public class folder_model implements itemVisitable {
     public int[] type(TypeViewModelFactory typeViewModelFactory) {
         return new int[]{typeViewModelFactory.type(this),itemVisitable.FOLDER};
     }
+
+    public void setParent_id(int parent_id) {
+        this.parent_id = parent_id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

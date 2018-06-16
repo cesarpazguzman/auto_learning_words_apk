@@ -80,6 +80,14 @@ public class databaseManager {
         return table!=null ? table.get_all_elements(parent) : new ArrayList<itemVisitable>();
     }
 
+    public void update(String name_table, int id, Map<String, Object> map_vals){
+        tableInterface table = get_table_instance(name_table);
+        if(table!=null){
+            ContentValues vals = values(map_vals);
+            get_table_instance(name_table).update(id,vals);
+        }
+    }
+
     private tableInterface get_table_instance(String key){
         if (tables.containsKey(key))
             return tables.get(key);

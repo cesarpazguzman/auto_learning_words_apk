@@ -23,7 +23,8 @@ import butterknife.ButterKnife;
 public class item_dialog extends DialogFragment {
     public interface ItemDialogListener {
         void onSaveItemDialog(String original, String traduccion, String example_1,
-                              String example_2, String comment, boolean open_again);
+                              String example_2, String comment, boolean open_again,
+                              int item_id);
     }
 
 
@@ -45,7 +46,7 @@ public class item_dialog extends DialogFragment {
 
     }
 
-    public static item_dialog newInstance(String original, String traduccion, String example_1,
+    public static item_dialog newInstance(int item_id, String original, String traduccion, String example_1,
                                           String example_2, String comment) {
         item_dialog frag = new item_dialog();
         frag.new_item = false;
@@ -55,6 +56,7 @@ public class item_dialog extends DialogFragment {
         args.putString("example_1", example_1);
         args.putString("example_2", example_2);
         args.putString("comment", comment);
+        args.putInt("item_id", item_id);
         frag.setArguments(args);
         return frag;
     }
@@ -81,12 +83,20 @@ public class item_dialog extends DialogFragment {
 
         getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         getDialog().getWindow().setGravity(Gravity.CENTER);
+
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ButterKnife.bind(this, view);
+
+        if(!new_item){
+            bt_save_close.setVisibility(View.INVISIBLE);
+            bt_save_new.setText("Guardar");
+            bt_close_item.setGravity(Gravity.CENTER);
+        }
 
         imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -144,12 +154,16 @@ public class item_dialog extends DialogFragment {
         String example1 = !et_example_one.getText().toString().isEmpty() ? et_example_one.getText().toString() : "";
         String example2 = !et_example_two.getText().toString().isEmpty() ? et_example_two.getText().toString() : "";
 
+
         ItemDialogListener listener = (ItemDialogListener) getActivity();
         if(new_item){
             listener.onSaveItemDialog(et_item_original.getText().toString(), et_item_traduccion.getText().toString(),
-                    example1, example2, comment, open_again);
+                    example1, example2, comment, open_again, -1);
         }else{
-            //HACER EDITAR
+            //EDITAR
+            int item_id = getArguments().getInt("item_id");
+            listener.onSaveItemDialog(et_item_original.getText().toString(), et_item_traduccion.getText().toString(),
+                    example1, example2, comment, open_again, item_id);
         }
 
         // Close the dialog and return back to the parent activity

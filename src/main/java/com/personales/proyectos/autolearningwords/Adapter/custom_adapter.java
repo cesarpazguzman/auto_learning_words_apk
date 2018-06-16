@@ -51,9 +51,27 @@ public class custom_adapter extends multi_select_adapter{
             }
         }
         if(!inserted){
-            this.viewModels.add(viewModels.size(),item);
-            notifyItemInserted(viewModels.size()-1);
+            if(item.type(typeViewModelFactory)[1]==itemVisitable.FOLDER){
+                this.viewModels.add(0,item);
+                notifyItemInserted(0);
+            }else if(item.type(typeViewModelFactory)[1]==itemVisitable.ITEM){
+                this.viewModels.add(viewModels.size(),item);
+                notifyItemInserted(viewModels.size()-1);
+            }
         }
+    }
+
+    public itemVisitable get_element(int type, int id){
+        for(itemVisitable it : viewModels){
+            if(it.getId() == id && it.type(typeViewModelFactory)[1]==type)
+                return it;
+        }
+        return null;
+    }
+
+    public void item_changed(itemVisitable item){
+        remove_element(get_element(item.type(typeViewModelFactory)[1], item.getId()));
+        add_element(item);
     }
 
     public void remove_element(itemVisitable item){

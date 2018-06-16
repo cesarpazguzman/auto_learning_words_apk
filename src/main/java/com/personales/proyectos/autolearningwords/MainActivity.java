@@ -88,11 +88,11 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                                 itemVisitable item = custom_adapter.get_viewModels().get(pos);
                                 if(item.type(mainTypeViewModel)[1]==itemVisitable.ITEM){
                                     item_model it = (item_model)item;
-                                    add_element_dialog(it.getName(), it.getTranslation(),
+                                    add_element_dialog(it.getId(), it.getName(), it.getTranslation(),
                                             it.getExample1(), it.getExample2(), it.getComment());
                                 }else if(item.type(mainTypeViewModel)[1]==itemVisitable.FOLDER){
                                     folder_model fd = (folder_model)item;
-                                    add_folder_dialog(fd.getName());
+                                    add_folder_dialog(fd.getId(), fd.getName());
                                 }
                                 swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
                                 swipeHelper.reset_swipe(-1);
@@ -333,10 +333,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     }
 
-    private void add_folder_dialog(String name){
+    private void add_folder_dialog(int folder_id, String name){
 
         FragmentManager fm = getSupportFragmentManager();
-        folder_dialog folder_dialog_frag = folder_dialog.newInstance(name);
+        folder_dialog folder_dialog_frag = folder_dialog.newInstance(folder_id, name);
         folder_dialog_frag.show(fm, "modify_item_dialog");
     }
 
@@ -347,18 +347,18 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     }
 
-    private void add_element_dialog(String original, String traduccion,
+    private void add_element_dialog(int item_id, String original, String traduccion,
                                     String example_1, String example_2, String comment){
 
         FragmentManager fm = getSupportFragmentManager();
-        item_dialog item_dialog_frag = item_dialog.newInstance(original, traduccion, example_1,
+        item_dialog item_dialog_frag = item_dialog.newInstance(item_id, original, traduccion, example_1,
                 example_2, comment);
         item_dialog_frag.show(fm, "modify_item_dialog");
     }
 
     @Override
     public void onSaveItemDialog(String original, String traduccion, String example1, String example2,
-                                 String comment, boolean open_again) {
+                                 String comment, boolean open_again, int item_id) {
         Map<String, Object> vals = new HashMap<>();
         vals.put(item.col.ORIGINAL, original);
         vals.put(item.col.TRANSLATION, traduccion);
@@ -367,40 +367,56 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         vals.put(item.col.EXAMPLE1, example1);
         vals.put(item.col.EXAMPLE2, example2);
 
-        itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
+        SwipeHelper.setISTOUCH(false);
+        if(item_id == -1){
+            itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
 
-        custom_adapter.add_element(ins);
+            custom_adapter.add_element(ins);
 
+            if(open_again){
+                add_element_dialog();
+            }
+        }else{
+            item_model ins = (item_model) custom_adapter.get_element(itemVisitable.ITEM, item_id);
+            if(ins!=null){
+                db_manager.update(item.NAME_TABLE, item_id, vals);
+                ins.setOriginal(original);
+                ins.setTranslation(traduccion);
+                ins.setExample1(example1);
+                ins.setExample2(example2);
+                ins.setComment(comment);
+                custom_adapter.item_changed(ins);
+            }
 
-        ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
-        view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
-
-        if(!SwipeHelper.getISTOUCH()){
             swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
-        }
-
-        if(open_again){
-            add_element_dialog();
         }
     }
 
 
     @Override
-    public void onSaveFolderDialog(String name, boolean open_again) {
+    public void onSaveFolderDialog(String name, boolean open_again, int folder_id) {
         Map<String, Object> vals = new HashMap<>();
         vals.put(folder.col.NAME, name);
         vals.put(folder.col.PARENT_ID, current_level);
 
-        itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
+        SwipeHelper.setISTOUCH(false);
 
-        custom_adapter.add_element(ins);
+        if(folder_id == -1){
+            itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
 
-        if(!SwipeHelper.getISTOUCH()){
+            custom_adapter.add_element(ins);
+
+            if(open_again){
+                add_folder_dialog();
+            }
+        }else{
+            folder_model ins = (folder_model) custom_adapter.get_element(itemVisitable.FOLDER, folder_id);
+            if(ins!=null){
+                db_manager.update(folder.NAME_TABLE, folder_id, vals);
+                ins.setName(name);
+                custom_adapter.item_changed(ins);
+            }
             swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
-        }
-
-        if(open_again){
-            add_folder_dialog();
         }
     }
 }

@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class folder_dialog extends DialogFragment {
     public interface FolderDialogListener {
-        void onSaveFolderDialog(String name, boolean open_again);
+        void onSaveFolderDialog(String name, boolean open_again, int folder_id);
     }
 
     @BindView(R.id.et_folder_name) EditText et_folder_name;
@@ -33,11 +33,12 @@ public class folder_dialog extends DialogFragment {
 
     }
 
-    public static folder_dialog newInstance(String name) {
+    public static folder_dialog newInstance(int folder_id, String name) {
         folder_dialog frag = new folder_dialog();
         frag.new_folder = false;
         Bundle args = new Bundle();
         args.putString("name", name);
+        args.putInt("folder_id", folder_id);
         frag.setArguments(args);
         return frag;
     }
@@ -73,6 +74,9 @@ public class folder_dialog extends DialogFragment {
 
         if(!new_folder){
             fill_values();
+            bt_save_close.setVisibility(View.INVISIBLE);
+            bt_save_new.setText("Guardar");
+            bt_close_item.setGravity(Gravity.CENTER);
         }
 
         bt_save_close.setOnClickListener(new View.OnClickListener() {
@@ -104,9 +108,11 @@ public class folder_dialog extends DialogFragment {
     private void save(boolean open_again){
         FolderDialogListener listener = (FolderDialogListener) getActivity();
         if(new_folder){
-            listener.onSaveFolderDialog(et_folder_name.getText().toString(), open_again);
+            listener.onSaveFolderDialog(et_folder_name.getText().toString(), open_again, -1);
         }else{
             //HACER EDITAR
+            int folder_id = getArguments().getInt("folder_id");
+            listener.onSaveFolderDialog(et_folder_name.getText().toString(), open_again, folder_id);
         }
 
         // Close the dialog and return back to the parent activity

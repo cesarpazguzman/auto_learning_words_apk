@@ -2,6 +2,7 @@ package com.personales.proyectos.autolearningwords.Holders;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ public class folderViewHolder extends baseViewHolder<folder_model> {
 
     @BindView(R.id.icon_folder)ImageView viewImageFolder;
     @BindView(R.id.folder_name)TextView folder_name;
+    @BindView(R.id.card_item)CardView card_item;
 
     public folderViewHolder(View itemView){
         super(itemView);
@@ -35,20 +37,18 @@ public class folderViewHolder extends baseViewHolder<folder_model> {
         this.viewModel = element;
         folder_name.setText(viewModel.getName());
 
-        setupListener();
+        card_item.setOnClickListener(click_listener);
     }
 
-    private void setupListener(){
-        this.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1){
-                    //Cambio de elementos en la lista
-                    Intent intent = new Intent(context, MainActivity.class);
-                    intent.putExtra(EXTRA_PARENTID, viewModel.getId());
-                    context.startActivity(intent);
-                }
+    private View.OnClickListener click_listener = new View.OnClickListener() {
+        public void onClick(View v) {
+            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1 ){
+                SwipeHelper.setISTOUCH(false);
+                //Cambio de elementos en la lista
+                Intent intent = new Intent(context, MainActivity.class);
+                intent.putExtra(EXTRA_PARENTID, viewModel.getId());
+                context.startActivity(intent);
             }
-        });
-    }
+        }
+    };
 }
