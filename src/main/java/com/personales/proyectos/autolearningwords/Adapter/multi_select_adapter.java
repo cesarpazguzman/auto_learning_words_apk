@@ -22,8 +22,17 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
     private TypeViewModelFactory typeViewModelFactory;
     private Context context;
 
-    public multi_select_adapter(TypeViewModelFactory typeViewModelFactory, Context context){
-        selected_items=new ArrayList<>();
+    public multi_select_adapter(TypeViewModelFactory typeViewModelFactory, final Context context){
+        selected_items=new ArrayList<itemVisitable>(){
+            @Override
+            public boolean add(itemVisitable itemVisitable) {
+                if(contains(itemVisitable))
+                    return false;
+                return super.add(itemVisitable);
+            }
+        };
+
+
         this.typeViewModelFactory = typeViewModelFactory;
         this.context= context;
     }

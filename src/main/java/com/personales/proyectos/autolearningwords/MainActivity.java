@@ -94,8 +94,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                                     folder_model fd = (folder_model)item;
                                     add_folder_dialog(fd.getName());
                                 }
-                                if(SwipeHelper.getSwipedPos() != SwipeHelper.oldPos)
-                                    swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+                                swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
                                 swipeHelper.reset_swipe(-1);
                             }
                         }
@@ -218,35 +217,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         return super.onOptionsItemSelected(item);
     }
 
-    private void add_folder_dialog(){
-        FragmentManager fm = getSupportFragmentManager();
-        folder_dialog folder_dialog_frag = folder_dialog.newInstance();
-        folder_dialog_frag.show(fm, "new_folder_dialog");
 
-    }
-
-    private void add_folder_dialog(String name){
-
-        FragmentManager fm = getSupportFragmentManager();
-        folder_dialog folder_dialog_frag = folder_dialog.newInstance(name);
-        folder_dialog_frag.show(fm, "modify_item_dialog");
-    }
-
-    private void add_element_dialog(){
-        FragmentManager fm = getSupportFragmentManager();
-        item_dialog item_dialog_frag = item_dialog.newInstance();
-        item_dialog_frag.show(fm, "new_item_dialog");
-
-    }
-
-    private void add_element_dialog(String original, String traduccion,
-                                    String example_1, String example_2, String comment){
-
-        FragmentManager fm = getSupportFragmentManager();
-        item_dialog item_dialog_frag = item_dialog.newInstance(original, traduccion, example_1,
-                example_2, comment);
-        item_dialog_frag.show(fm, "modify_item_dialog");
-    }
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         @Override
@@ -267,7 +238,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 case R.id.action_delete:
                     alertDialogHelper.showAlertDialog("","Desea eliminar los "+
                                     ((Integer)custom_adapter.get_selected_items().size()).toString()+" elementos seleccionados?",
-                            "ELIMINAR","CANCELAR", 1, true, null);
+                            "ELIMINAR","CANCELAR", "", 1, true, null);
                     return true;
                 default:
                     break;
@@ -354,6 +325,37 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     }
 
+
+    private void add_folder_dialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        folder_dialog folder_dialog_frag = folder_dialog.newInstance();
+        folder_dialog_frag.show(fm, "new_folder_dialog");
+
+    }
+
+    private void add_folder_dialog(String name){
+
+        FragmentManager fm = getSupportFragmentManager();
+        folder_dialog folder_dialog_frag = folder_dialog.newInstance(name);
+        folder_dialog_frag.show(fm, "modify_item_dialog");
+    }
+
+    private void add_element_dialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        item_dialog item_dialog_frag = item_dialog.newInstance();
+        item_dialog_frag.show(fm, "new_item_dialog");
+
+    }
+
+    private void add_element_dialog(String original, String traduccion,
+                                    String example_1, String example_2, String comment){
+
+        FragmentManager fm = getSupportFragmentManager();
+        item_dialog item_dialog_frag = item_dialog.newInstance(original, traduccion, example_1,
+                example_2, comment);
+        item_dialog_frag.show(fm, "modify_item_dialog");
+    }
+
     @Override
     public void onSaveItemDialog(String original, String traduccion, String example1, String example2,
                                  String comment, boolean open_again) {
@@ -381,6 +383,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             add_element_dialog();
         }
     }
+
 
     @Override
     public void onSaveFolderDialog(String name, boolean open_again) {

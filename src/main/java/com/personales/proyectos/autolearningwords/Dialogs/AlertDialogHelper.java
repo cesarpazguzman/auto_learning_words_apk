@@ -22,19 +22,6 @@ public class AlertDialogHelper {
         callBack = (AlertDialogListener) context;
     }
 
-    /**
-     * Displays the AlertDialog with 3 Action buttons
-     *
-     * you can set cancelable property
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param negative
-     * @param neutral
-     * @param from
-     * @param isCancelable
-     */
     public void showAlertDialog(String title,String message,String positive,String negative,
                                 String neutral,final int from,boolean isCancelable, final View view)
     {
@@ -109,92 +96,6 @@ public class AlertDialogHelper {
         alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
-
-    /**
-     * Displays the AlertDialog with positive action button only
-     *
-     * you can set cancelable property
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param from
-     * @param isCancelable
-     */
-    public void showAlertDialog(String title,String message,String positive,final int from,boolean isCancelable, View view)
-    {
-        showAlertDialog(title,message,positive,"","",from,isCancelable, view);
-    }
-
-    /**
-     * Displays the AlertDialog with positive action button only
-     *
-     * cancelable property is false (Default)
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param from
-     */
-    public void showAlertDialog(String title,String message,String positive,final int from, View view)
-    {
-        showAlertDialog(title,message,positive,"","",from,false, view);
-    }
-
-
-    /**
-     *
-     * Displays the AlertDialog with positive & negative buttons
-     *
-     * you can set cancelable property
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param negative
-     * @param from
-     * @param isCancelable
-     */
-
-    public void showAlertDialog(String title,String message,String positive,String negative,final int from,boolean isCancelable, View view)
-    {
-        showAlertDialog(title,message,positive,negative,"",from,isCancelable, view);
-    }
-
-    /**
-     *
-     * Displays the AlertDialog with positive & negative buttons
-     *
-     * cancelable property is false (Default)
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param negative
-     * @param from
-     */
-    public void showAlertDialog(String title,String message,String positive,String negative,final int from, View view)
-    {
-        showAlertDialog(title,message,positive,negative,"",from,false, view);
-    }
-
-    /**
-     * Displays the AlertDialog with 3 Action buttons
-     *
-     * cancelable property is false (Default)
-     *
-     * @param title
-     * @param message
-     * @param positive
-     * @param negative
-     * @param neutral
-     * @param from
-     */
-    public void showAlertDialog(String title,String message,String positive,String negative,String neutral,final int from, View view)
-    {
-        showAlertDialog(title,message,positive,negative,neutral,from,false, view);
-    }
-
 
     public interface AlertDialogListener
     {

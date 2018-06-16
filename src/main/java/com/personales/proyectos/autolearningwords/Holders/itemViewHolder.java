@@ -51,7 +51,7 @@ public class itemViewHolder extends baseViewHolder<item_model> {
 
         cl_button_expand.setVisibility(
                 txt_examples_item.getText().toString().isEmpty() ?
-                        View.GONE :
+                        View.INVISIBLE :
                         View.VISIBLE);
 
         card_item.setOnClickListener(
