@@ -26,9 +26,11 @@ import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
+import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.item_dialog;
 import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
+import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 
@@ -40,7 +42,7 @@ import java.util.Map;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
-                                                          item_dialog.ItemDialogListener{
+                                                          item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener{
 
     private custom_adapter custom_adapter;
     @BindView(R.id.rv_general) RecyclerView rv_folders;
@@ -52,7 +54,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     private ActionMode mActionMode;
     private AlertDialogHelper alertDialogHelper;
     private InputMethodManager imm;
-    private SwipeHelper swipeHelper;
 
     @Override
     public int getLayoutId() {
@@ -85,13 +86,13 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                             @Override
                             public void onClick(int pos) {
                                 itemVisitable item = custom_adapter.get_viewModels().get(pos);
-                                System.out.println("ENTRA");
                                 if(item.type(mainTypeViewModel)[1]==itemVisitable.ITEM){
                                     item_model it = (item_model)item;
                                     add_element_dialog(it.getName(), it.getTranslation(),
                                             it.getExample1(), it.getExample2(), it.getComment());
                                 }else if(item.type(mainTypeViewModel)[1]==itemVisitable.FOLDER){
-
+                                    folder_model fd = (folder_model)item;
+                                    add_folder_dialog(fd.getName());
                                 }
                                 if(SwipeHelper.getSwipedPos() != SwipeHelper.oldPos)
                                     swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
@@ -101,7 +102,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 ));
             }
         };
-
 
         custom_adapter = new custom_adapter(mainTypeViewModel,this);
         rv_folders.setAdapter(custom_adapter);
@@ -123,6 +123,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 rv_folders,
                 get_item_click_listener()));
     }
+
+    private SwipeHelper swipeHelper;
 
     private RecyclerItemClickListener.OnItemClickListener get_item_click_listener(){
         return new RecyclerItemClickListener.OnItemClickListener() {
@@ -200,10 +202,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.add_folder:
-                            LayoutInflater inflater = MainActivity.this.getLayoutInflater();
-                            View view = inflater.inflate(R.layout.dialog_folder, null);
-                            alertDialogHelper.showAlertDialog("","",
-                                    "ACEPTAR","CANCELAR", 2, true, view);
+                            add_folder_dialog();
                             break;
 
                         case R.id.add_item:
@@ -217,6 +216,20 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void add_folder_dialog(){
+        FragmentManager fm = getSupportFragmentManager();
+        folder_dialog folder_dialog_frag = folder_dialog.newInstance();
+        folder_dialog_frag.show(fm, "new_folder_dialog");
+
+    }
+
+    private void add_folder_dialog(String name){
+
+        FragmentManager fm = getSupportFragmentManager();
+        folder_dialog folder_dialog_frag = folder_dialog.newInstance(name);
+        folder_dialog_frag.show(fm, "modify_item_dialog");
     }
 
     private void add_element_dialog(){
@@ -328,19 +341,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     mActionMode.finish();
                 }
             }
-        }else if(from==2){
-            EditText et_folder_name = view.findViewById(R.id.et_item_original);
-            Map<String, Object> vals = new HashMap<>();
-            vals.put(folder.col.NAME, et_folder_name.getText().toString());
-            vals.put(folder.col.PARENT_ID, current_level);
-
-            itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
-
-            custom_adapter.add_element(ins);
-
-            if(!SwipeHelper.getISTOUCH()){
-                swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
-            }
         }
     }
 
@@ -379,6 +379,25 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
         if(open_again){
             add_element_dialog();
+        }
+    }
+
+    @Override
+    public void onSaveFolderDialog(String name, boolean open_again) {
+        Map<String, Object> vals = new HashMap<>();
+        vals.put(folder.col.NAME, name);
+        vals.put(folder.col.PARENT_ID, current_level);
+
+        itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
+
+        custom_adapter.add_element(ins);
+
+        if(!SwipeHelper.getISTOUCH()){
+            swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+        }
+
+        if(open_again){
+            add_folder_dialog();
         }
     }
 }

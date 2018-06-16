@@ -170,10 +170,12 @@
         android:id="@+id/bt_close_item"
         android:layout_width="80dp"
         android:layout_height="51dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:gravity="bottom"
         android:text="CERRAR"
         android:theme="@style/PrimaryFlatButton"
-        app:layout_constraintBaseline_toBaselineOf="@+id/bt_save_close"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_save_close"
         app:layout_constraintEnd_toStartOf="@+id/bt_save_close" />
 
 </android.support.constraint.ConstraintLayout>

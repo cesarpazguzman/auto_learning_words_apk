@@ -1,7 +1,5 @@
 package com.personales.proyectos.autolearningwords.Dialogs;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,24 +8,13 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
-
-import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
-import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
-import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
-import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
-import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.R;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,7 +80,7 @@ public class item_dialog extends DialogFragment {
             return;
 
         getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.TOP);
+        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override

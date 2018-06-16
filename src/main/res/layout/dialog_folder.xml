@@ -3,16 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
     <ImageView
         android:id="@+id/icon_item_dialog"
         android:layout_width="53dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/et_item_original"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_folder_open_custom_24dp" />
@@ -21,28 +19,66 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:text="NUEVA CARPETA"
         android:textAlignment="center"
         android:textColor="@color/toolbar_text_color"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/icon_item_dialog"
-        app:layout_constraintStart_toEndOf="@+id/icon_item_dialog" />
+        app:layout_constraintBottom_toTopOf="@+id/et_folder_name"
+        app:layout_constraintStart_toEndOf="@+id/icon_item_dialog"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/et_item_original"
+        android:id="@+id/et_folder_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:hint="Nombre"
-        android:textSize="24sp"
-        android:maxLines="1"
         android:inputType="textCapSentences|textMultiLine"
+        android:maxLines="1"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/icon_item_dialog" />
+
+    <Button
+        android:id="@+id/bt_save_new"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/button2_dialog_new"
+        android:theme="@style/PrimaryFlatButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/et_folder_name"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt_save_close"
+        android:layout_width="90dp"
+        android:layout_height="wrap_content"
+        android:text="@string/button1_dialog_new"
+        android:theme="@style/PrimaryFlatButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/bt_save_new"
+        app:layout_constraintEnd_toStartOf="@+id/bt_save_new" />
+
+    <Button
+        android:id="@+id/bt_close_item"
+        android:layout_width="80dp"
+        android:layout_height="51dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="bottom"
+        android:text="CERRAR"
+        android:theme="@style/PrimaryFlatButton"
+        app:layout_constraintBottom_toBottomOf="@+id/bt_save_close"
+        app:layout_constraintEnd_toStartOf="@+id/bt_save_close" />
 </android.support.constraint.ConstraintLayout>
