@@ -113,4 +113,40 @@ public class item implements tableInterface {
         return listItems;
     }
 
+
+    public ArrayList<itemVisitable> get_all_elements() {
+        ArrayList<itemVisitable> listItems = new ArrayList<itemVisitable>();
+
+        String sql = "SELECT * from " + NAME_TABLE;
+        Cursor cursor = db.rawQuery(sql, new String[] {});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(folder.col.ID));
+                String original = cursor.getString(cursor.getColumnIndex(col.ORIGINAL));
+                String traduccion = cursor.getString(cursor.getColumnIndex(col.TRANSLATION));
+                String comment = "", example1 = "", example2 = "";
+
+                if(cursor.getColumnIndex(col.COMMENT)!=-1)
+                    comment = cursor.getString(cursor.getColumnIndex(col.COMMENT));
+
+                if(cursor.getColumnIndex(col.EXAMPLE1)!=-1)
+                    example1 = cursor.getString(cursor.getColumnIndex(col.EXAMPLE1));
+
+                if(cursor.getColumnIndex(col.EXAMPLE2)!=-1)
+                    example2 = cursor.getString(cursor.getColumnIndex(col.EXAMPLE2));
+
+                int parent_id = cursor.getInt(cursor.getColumnIndex(col.FOLDER_ID));
+
+                listItems.add(new item_model(id, original, traduccion, parent_id,
+                        comment, example1, example2));
+
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
+
 }

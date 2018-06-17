@@ -31,7 +31,7 @@ public class item_model implements itemVisitable {
         return translation;
     }
 
-    public int getFolder_id() {
+    public int getParent_id() {
         return folder_id;
     }
 
@@ -55,7 +55,7 @@ public class item_model implements itemVisitable {
         return new int[]{typeViewModelFactory.type(this),itemVisitable.ITEM};
     }
 
-    public void setFolder_id(int folder_id) {
+    public void setParent_id(int folder_id) {
         this.folder_id = folder_id;
     }
 

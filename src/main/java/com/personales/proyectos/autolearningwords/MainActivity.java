@@ -1,5 +1,6 @@
 package com.personales.proyectos.autolearningwords;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -27,6 +28,7 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
+import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.item_dialog;
 import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
@@ -42,7 +44,8 @@ import java.util.Map;
 import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
-                                                          item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener{
+                                                          item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener,
+                                                          folders_dialog.ListFoldersDialogListener{
 
     private custom_adapter custom_adapter;
     @BindView(R.id.rv_general) RecyclerView rv_folders;
@@ -110,17 +113,21 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             current_level = intent.getIntExtra(folderViewHolder.EXTRA_PARENTID,current_level);
         }
 
-        ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
-        view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
-
-        custom_adapter.updateListView(view_ids);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(current_level!=0);
 
         rv_folders.addOnItemTouchListener(new RecyclerItemClickListener(
                 this,
                 rv_folders,
                 get_item_click_listener()));
+    }
+
+    private void update_list_items(){
+        if(custom_adapter!=null && db_manager!=null){
+            ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
+            view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
+
+            custom_adapter.updateListView(view_ids);
+        }
     }
 
     private SwipeHelper swipeHelper;
@@ -240,6 +247,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                                     ((Integer)custom_adapter.get_selected_items().size()).toString()+" elementos seleccionados?",
                             "ELIMINAR","CANCELAR", "", 1, true, null);
                     return true;
+                case R.id.action_move:
+                    FragmentManager fm = getSupportFragmentManager();
+                    folders_dialog folders_dialog_frag = folders_dialog.newInstance();
+                    folders_dialog_frag.show(fm, "new_folders_dialog");
                 default:
                     break;
             }
@@ -417,6 +428,35 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 custom_adapter.item_changed(ins);
             }
             swipeHelper.reset_swipe(SwipeHelper.getSwipedPos());
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        update_list_items();
+
+    }
+
+    @Override
+    public void onMoveItemsDialog(int parent_id) {
+        ArrayList<itemVisitable> selected_items = new ArrayList<>();
+        selected_items.addAll(custom_adapter.get_selected_items());
+        for(itemVisitable items:selected_items){
+            if(items.getParent_id()!=parent_id){
+                Map<String, Object> vals = new HashMap<>();
+
+                if(items.type(mainTypeViewModel)[1] == itemVisitable.ITEM){
+                    vals.put(item.col.FOLDER_ID, parent_id);
+                    db_manager.update(item.NAME_TABLE, items.getId(),vals);
+                }else if (items.type(mainTypeViewModel)[1] == itemVisitable.FOLDER) {
+                    vals.put(folder.col.PARENT_ID, parent_id);
+                    db_manager.update(folder.NAME_TABLE, items.getId(), vals);
+                }
+                int pos_adapter = custom_adapter.get_viewModels().indexOf(items);
+                multi_select(pos_adapter);
+                custom_adapter.remove_element(items);
+            }
         }
     }
 }

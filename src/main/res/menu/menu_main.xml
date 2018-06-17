@@ -4,6 +4,15 @@
     tools:context="com.personales.proyectos.autolearningwords.MainActivity">
 
     <item
+        android:id="@+id/action_language"
+        android:title="  INGLÉS  "
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_more"
+        android:title="  MÁS  "
+        app:showAsAction="always" />
+    <item
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/menuSearch"

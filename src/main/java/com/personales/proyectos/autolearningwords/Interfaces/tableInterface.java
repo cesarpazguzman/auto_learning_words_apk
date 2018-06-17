@@ -12,6 +12,6 @@ public interface tableInterface {
     void delete(Integer id);
 
     ArrayList<itemVisitable> get_all_elements(int parent);
-
+    ArrayList<itemVisitable> get_all_elements();
     void update(Integer id, ContentValues vals);
 }

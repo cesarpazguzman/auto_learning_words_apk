@@ -85,4 +85,26 @@ public class folder implements tableInterface {
         return listItems;
     }
 
+    public ArrayList<itemVisitable> get_all_elements() {
+        ArrayList<itemVisitable> listItems = new ArrayList<itemVisitable>();
+
+        String sql = "SELECT * from " + NAME_TABLE+ " ORDER BY "+col.NAME+" ASC";
+
+        Cursor cursor = db.rawQuery(sql, new String[] {});
+
+        if (cursor.moveToFirst()) {
+            do {
+                int id = cursor.getInt(cursor.getColumnIndex(col.ID));
+                String name = cursor.getString(cursor.getColumnIndex(col.NAME));
+                int parent_id = cursor.getInt(cursor.getColumnIndex(col.PARENT_ID));
+
+                listItems.add(new folder_model(id, name, parent_id));
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return listItems;
+    }
+
 }

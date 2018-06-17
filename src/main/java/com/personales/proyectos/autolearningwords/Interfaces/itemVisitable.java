@@ -11,6 +11,7 @@ public interface itemVisitable extends Serializable{
     int[] type(TypeViewModelFactory typeViewModelFactory);
 
     String getName();
-
+    int getParent_id();
+    void setParent_id(int parent_id);
     int getId();
 }

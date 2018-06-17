@@ -20,6 +20,8 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:textColorPrimary">@color/toolbar_text_color</item>
+        <item name="android:actionMenuTextColor">@color/toolbar_text_color</item>
+        <item name="android:textSize">18dp</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
