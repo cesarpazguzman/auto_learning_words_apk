@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.personales.proyectos.autolearningwords.Activity.BaseActivity;
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
@@ -494,5 +495,13 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 custom_adapter.remove_element(items);
             }
         }
+        String name_folder = "PRINCIPAL";
+        for(itemVisitable item:custom_adapter.get_viewModels()){
+            if(item.getId()==parent_id) {
+                name_folder = item.getName();
+                break;
+            }
+        }
+        Toast.makeText(this, "Se han movido los elementos seleccionados a la carpeta "+name_folder, Toast.LENGTH_LONG).show();
     }
 }
