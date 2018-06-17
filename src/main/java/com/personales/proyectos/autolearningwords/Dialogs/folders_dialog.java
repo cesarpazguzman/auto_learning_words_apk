@@ -38,12 +38,14 @@ public class folders_dialog extends DialogFragment {
     private ArrayList<Integer> elements_list;
     private int current_selection = -1;
 
+    private ArrayList<Integer> folder_ids_selected;
     public folders_dialog(){
         elements_list = new ArrayList<>();
     }
 
-    public static folders_dialog newInstance() {
+    public static folders_dialog newInstance(ArrayList<Integer> folder_ids_selected) {
         folders_dialog frag = new folders_dialog();
+        frag.folder_ids_selected = folder_ids_selected;
         return frag;
     }
 
@@ -110,7 +112,7 @@ public class folders_dialog extends DialogFragment {
             elements_list.add(0);
         }
         for(itemVisitable item : items){
-            if(item.getParent_id() == parent_id) {
+            if(item.getParent_id() == parent_id && !folder_ids_selected.contains(item.getId())) {
                 int level2 = level +1;
                 r.add(repeat(level2, "     ")+"/"+item.getName());
                 elements_list.add(item.getId());

@@ -278,7 +278,14 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     return true;
                 case R.id.action_move:
                     FragmentManager fm = getSupportFragmentManager();
-                    folders_dialog folders_dialog_frag = folders_dialog.newInstance();
+                    ArrayList<Integer> folder_ids_selected = new ArrayList<>();
+                    for(itemVisitable it:custom_adapter.get_selected_items()){
+                        if(it.type(mainTypeViewModel)[1] == itemVisitable.FOLDER){
+                            folder_ids_selected.add(it.getId());
+                        }
+                    }
+
+                    folders_dialog folders_dialog_frag = folders_dialog.newInstance(folder_ids_selected);
                     folders_dialog_frag.show(fm, "new_folders_dialog");
                 default:
                     break;
