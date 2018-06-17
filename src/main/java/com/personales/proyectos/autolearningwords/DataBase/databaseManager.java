@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
+import com.personales.proyectos.autolearningwords.DataBase.Tables.language;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Interfaces.tableInterface;
 
@@ -60,6 +61,7 @@ public class databaseManager {
     private void instance_all_tables(){
         tables.put(folder.NAME_TABLE,new folder(db));
         tables.put(item.NAME_TABLE, new item(db));
+        tables.put(language.NAME_TABLE, new language(db));
     }
 
     public void delete(String name_table, Integer id){
@@ -68,22 +70,10 @@ public class databaseManager {
             get_table_instance(name_table).delete(id);
     }
 
-    public itemVisitable insert(String name_table, Map<String, Object> map_vals) {
+    public Object insert(String name_table, Map<String, Object> map_vals) {
         tableInterface table = get_table_instance(name_table);
         ContentValues vals = values(map_vals);
         return table!=null ? table.insert(vals): null;
-    }
-
-    public ArrayList<itemVisitable> get_all_elements(String name_table, int parent){
-        tableInterface table = get_table_instance(name_table);
-
-        return table!=null ? table.get_all_elements(parent) : new ArrayList<itemVisitable>();
-    }
-
-    public ArrayList<itemVisitable> get_all_elements(String name_table){
-        tableInterface table = get_table_instance(name_table);
-
-        return table!=null ? table.get_all_elements() : new ArrayList<itemVisitable>();
     }
 
     public void update(String name_table, int id, Map<String, Object> map_vals){
@@ -94,7 +84,7 @@ public class databaseManager {
         }
     }
 
-    private tableInterface get_table_instance(String key){
+    public tableInterface get_table_instance(String key){
         if (tables.containsKey(key))
             return tables.get(key);
 

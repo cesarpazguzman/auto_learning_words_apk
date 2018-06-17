@@ -23,12 +23,14 @@ import android.widget.Toast;
 
 import com.personales.proyectos.autolearningwords.Activity.BaseActivity;
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
+import com.personales.proyectos.autolearningwords.DataBase.Tables.language;
 import com.personales.proyectos.autolearningwords.Dialogs.AlertDialogHelper;
 import com.personales.proyectos.autolearningwords.Base.RecyclerItemClickListener;
 import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
+import com.personales.proyectos.autolearningwords.Dialogs.create_language_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.item_dialog;
@@ -36,6 +38,7 @@ import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
+import com.personales.proyectos.autolearningwords.Models.language_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 
 import java.lang.reflect.Array;
@@ -60,6 +63,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     private ActionMode mActionMode;
     private AlertDialogHelper alertDialogHelper;
     private InputMethodManager imm;
+    private Menu menu_principal;
 
     @Override
     public int getLayoutId() {
@@ -126,8 +130,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     private void update_list_items(){
         if(custom_adapter!=null && db_manager!=null){
-            ArrayList<itemVisitable> view_ids = db_manager.get_all_elements(folder.NAME_TABLE, current_level);
-            view_ids.addAll(db_manager.get_all_elements(item.NAME_TABLE, current_level));
+            ArrayList<itemVisitable> view_ids = db_manager.get_table_instance(folder.NAME_TABLE).get_all_elements(current_level);
+            view_ids.addAll(db_manager.get_table_instance(item.NAME_TABLE).get_all_elements(current_level));
 
             custom_adapter.updateListView(view_ids);
         }
@@ -198,6 +202,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         SearchView searchView = (SearchView)item.getActionView();
         searchView.setOnQueryTextListener(this);
 
+        menu_principal = menu;
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -258,12 +264,27 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             return true;
         }else if(id == R.id.action_language){
             PopupMenu popupMenu = new PopupMenu(this, findViewById(id));
-            popupMenu.getMenu().add("ALEMÁN").getItemId();
-            popupMenu.getMenu().add("FRANCÉS").getItemId();
-            popupMenu.getMenu().add("ITALIANO").getItemId();
-            popupMenu.getMenu().add("PORTUGUÉS").getItemId();
-            popupMenu.getMenu().add("AÑADIR IDIOMA").getItemId();
+
+            final ArrayList<language_model> languages = db_manager.get_table_instance(language.NAME_TABLE).get_all_elements();
+            for(int i=0;i<languages.size();++i){
+                popupMenu.getMenu().add(0,languages.get(i).getId(),0,languages.get(i).getName());
+            }
+
+            popupMenu.getMenu().add(0,100,0,"AÑADIR IDIOMA");
             popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    if(item.getItemId() == 100){
+                        FragmentManager fm = getSupportFragmentManager();
+                        create_language_dialog create_language_dialog_frag = create_language_dialog.newInstance();
+                        create_language_dialog_frag.show(fm, "new_create_language_dialog");
+                    }else{
+                        menu_principal.getItem(0).setTitle(languages.get(item.getItemId()-1).getName());
+                    }
+                    return false;
+                }
+            });
             return true;
         }
 
@@ -433,7 +454,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
         SwipeHelper.setISTOUCH(false);
         if(item_id == -1){
-            itemVisitable ins = db_manager.insert(item.NAME_TABLE, vals);
+            itemVisitable ins = (itemVisitable) db_manager.insert(item.NAME_TABLE, vals);
 
             custom_adapter.add_element(ins);
 
@@ -466,7 +487,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         SwipeHelper.setISTOUCH(false);
 
         if(folder_id == -1){
-            itemVisitable ins = db_manager.insert(folder.NAME_TABLE, vals);
+            itemVisitable ins = (itemVisitable) db_manager.insert(folder.NAME_TABLE, vals);
 
             custom_adapter.add_element(ins);
 
@@ -525,14 +546,16 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     public boolean onQueryTextChange(String s) {
         s = s.toLowerCase();
         ArrayList<itemVisitable> newList = new ArrayList<>();
+        ArrayList<itemVisitable> items = db_manager.get_table_instance(item.NAME_TABLE).get_all_elements();
+        ArrayList<itemVisitable> folders = db_manager.get_table_instance(folder.NAME_TABLE).get_all_elements();
         if(!s.equals("")){
-            for(itemVisitable item:db_manager.get_all_elements(item.NAME_TABLE)){
+            for(itemVisitable item:items){
                 String name = item.getName().toLowerCase();
                 if(name.contains(s)){
                     newList.add(item);
                 }
             }
-            for(itemVisitable item:db_manager.get_all_elements(folder.NAME_TABLE)){
+            for(itemVisitable item:folders){
                 String name = item.getName().toLowerCase();
                 if(name.contains(s)){
                     newList.add(item);

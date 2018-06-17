@@ -73,7 +73,7 @@ public class folders_dialog extends DialogFragment {
         ButterKnife.bind(this, view);
 
         databaseManager db_manager = databaseManager.getInstance(getContext());
-        ArrayList<itemVisitable> folders = db_manager.get_all_elements(folder.NAME_TABLE);
+        ArrayList<itemVisitable> folders = db_manager.get_table_instance(folder.NAME_TABLE).get_all_elements();
 
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, get_items_sorted(folders, 0, 0));
 
