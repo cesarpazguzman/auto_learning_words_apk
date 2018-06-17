@@ -219,6 +219,35 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 }
             });
             return true;
+        }else if(id == R.id.action_more){
+            PopupMenu popupMenu = new PopupMenu(this, findViewById(id));
+            popupMenu.inflate(R.menu.menu_more);
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.test:
+                            break;
+
+                        case R.id.settings:
+                            break;
+                        case R.id.export_data:
+                            break;
+
+                        case R.id.import_data:
+                            break;
+
+                        case R.id.contact:
+                            break;
+
+                        case R.id.help:
+                            break;
+                    }
+                    return false;
+                }
+            });
+            return true;
         }
 
         return super.onOptionsItemSelected(item);

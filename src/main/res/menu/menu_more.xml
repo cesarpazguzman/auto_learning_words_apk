@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <item
+        android:id="@+id/test"
+        app:showAsAction="always"
+        android:title="Hacer test"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/settings"
+        app:showAsAction="always"
+        android:title="Configuración"
+        android:visible="true" />
+    <item
+        android:id="@+id/export_data"
+        app:showAsAction="always"
+        android:title="Exportar base de datos"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/import_data"
+        app:showAsAction="always"
+        android:title="Importar base de datos"
+        android:visible="true" />
+
+    <item
+        android:id="@+id/contact"
+        app:showAsAction="always"
+        android:title="Contacto"
+        android:visible="true"/>
+    <item
+        android:id="@+id/help"
+        app:showAsAction="always"
+        android:title="Ayuda"
+        android:visible="true" />
+</menu>
