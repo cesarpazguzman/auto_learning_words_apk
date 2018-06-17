@@ -18,6 +18,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.personales.proyectos.autolearningwords.Activity.BaseActivity;
@@ -37,6 +38,7 @@ import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +48,7 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
                                                           item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener,
-                                                          folders_dialog.ListFoldersDialogListener{
+                                                          folders_dialog.ListFoldersDialogListener, SearchView.OnQueryTextListener{
 
     private custom_adapter custom_adapter;
     @BindView(R.id.rv_general) RecyclerView rv_folders;
@@ -192,6 +194,10 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MenuItem item = menu.findItem(R.id.menuSearch);
+        SearchView searchView = (SearchView)item.getActionView();
+        searchView.setOnQueryTextListener(this);
+
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -223,6 +229,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         }else if(id == R.id.action_more){
             PopupMenu popupMenu = new PopupMenu(this, findViewById(id));
             popupMenu.inflate(R.menu.menu_more);
+            int pr = popupMenu.getMenu().add("PRUEBA").getItemId();
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -248,6 +255,15 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     return false;
                 }
             });
+            return true;
+        }else if(id == R.id.action_language){
+            PopupMenu popupMenu = new PopupMenu(this, findViewById(id));
+            popupMenu.getMenu().add("ALEMÁN").getItemId();
+            popupMenu.getMenu().add("FRANCÉS").getItemId();
+            popupMenu.getMenu().add("ITALIANO").getItemId();
+            popupMenu.getMenu().add("PORTUGUÉS").getItemId();
+            popupMenu.getMenu().add("AÑADIR IDIOMA").getItemId();
+            popupMenu.show();
             return true;
         }
 
@@ -503,5 +519,36 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             }
         }
         Toast.makeText(this, "Se han movido los elementos seleccionados a la carpeta "+name_folder, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onQueryTextChange(String s) {
+        s = s.toLowerCase();
+        ArrayList<itemVisitable> newList = new ArrayList<>();
+        if(!s.equals("")){
+            for(itemVisitable item:db_manager.get_all_elements(item.NAME_TABLE)){
+                String name = item.getName().toLowerCase();
+                if(name.contains(s)){
+                    newList.add(item);
+                }
+            }
+            for(itemVisitable item:db_manager.get_all_elements(folder.NAME_TABLE)){
+                String name = item.getName().toLowerCase();
+                if(name.contains(s)){
+                    newList.add(item);
+                }
+            }
+            custom_adapter.updateListView(newList);
+        }else{
+            update_list_items();
+        }
+
+        System.out.println("LIST: "+newList+" s: "+s);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String s) {
+        return false;
     }
 }
