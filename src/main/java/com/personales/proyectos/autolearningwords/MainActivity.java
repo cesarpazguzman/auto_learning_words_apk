@@ -294,15 +294,24 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         _session.set_language_translation(languages.get(-101+item.getItemId()).getId());
 
                         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);
 
                         //update_list_items();
                     }
                     else if(item.getItemId()>200){
                         db_manager.delete(language.NAME_TABLE, languages.get(-201+item.getItemId()).getId());
-                        if(languages.size()<=1)
+                        if(languages.size()<=1){
                             menu_principal.getItem(0).setTitle("IDIOMA");
+                        }
+                        if(languages.get(-201+item.getItemId()).getId() == session.getInstance().get_language_translation()){
+                            _session.set_language_translation(-1);
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+                        }
+
+
                     }
                     return false;
                 }
