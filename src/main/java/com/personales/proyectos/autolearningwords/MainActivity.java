@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.SubMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +41,7 @@ import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.language_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
+import com.personales.proyectos.autolearningwords.Models.session;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -48,6 +50,8 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+
+import static com.personales.proyectos.autolearningwords.Holders.folderViewHolder.EXTRA_PARENTID;
 
 public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
                                                           item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener,
@@ -64,6 +68,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     private AlertDialogHelper alertDialogHelper;
     private InputMethodManager imm;
     private Menu menu_principal;
+    private session _session;
 
     @Override
     public int getLayoutId() {
@@ -74,6 +79,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        _session = session.getInstance(this);
         setTitle("");
 
         mainTypeViewModel = new mainTypeViewModel();
@@ -116,8 +122,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         rv_folders.setAdapter(custom_adapter);
 
         Intent intent = getIntent();
-        if(intent.hasExtra(folderViewHolder.EXTRA_PARENTID)){
-            current_level = intent.getIntExtra(folderViewHolder.EXTRA_PARENTID,current_level);
+        if(intent.hasExtra(EXTRA_PARENTID)){
+            current_level = intent.getIntExtra(EXTRA_PARENTID,current_level);
         }
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(current_level!=0);
@@ -203,6 +209,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         searchView.setOnQueryTextListener(this);
 
         menu_principal = menu;
+        menu_principal.getItem(0).setTitle(_session.get_language_translation() == -1 ?"IDIOMA":
+                ((language)(db_manager.get_table_instance(language.NAME_TABLE))).get_name(_session.get_language_translation()));
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -267,7 +275,9 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
             final ArrayList<language_model> languages = db_manager.get_table_instance(language.NAME_TABLE).get_all_elements();
             for(int i=0;i<languages.size();++i){
-                popupMenu.getMenu().add(0,languages.get(i).getId(),0,languages.get(i).getName());
+                SubMenu sMenu = popupMenu.getMenu().addSubMenu(0,languages.get(i).getId(),0,languages.get(i).getName());
+                sMenu.add(0, 101+i, 0, "Seleccionar");
+                sMenu.add(0, 201+i, 0, "Eliminar");
             }
 
             popupMenu.getMenu().add(0,100,0,"AÑADIR IDIOMA");
@@ -279,8 +289,20 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         FragmentManager fm = getSupportFragmentManager();
                         create_language_dialog create_language_dialog_frag = create_language_dialog.newInstance();
                         create_language_dialog_frag.show(fm, "new_create_language_dialog");
-                    }else{
-                        menu_principal.getItem(0).setTitle(languages.get(item.getItemId()-1).getName());
+                    }else if(item.getItemId()>100 && item.getItemId() < 201){
+                        menu_principal.getItem(0).setTitle(languages.get(-101+item.getItemId()).getName());
+                        _session.set_language_translation(languages.get(-101+item.getItemId()).getId());
+
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(intent);
+
+                        //update_list_items();
+                    }
+                    else if(item.getItemId()>200){
+                        db_manager.delete(language.NAME_TABLE, languages.get(-201+item.getItemId()).getId());
+                        if(languages.size()<=1)
+                            menu_principal.getItem(0).setTitle("IDIOMA");
                     }
                     return false;
                 }

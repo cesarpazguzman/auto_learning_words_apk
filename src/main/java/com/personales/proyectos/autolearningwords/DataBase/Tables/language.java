@@ -77,5 +77,22 @@ public class language implements tableInterface {
 
         return listItems;
     }
+    public String get_name(Integer id){
+        String sql = "SELECT * from " + NAME_TABLE+ " WHERE "+ col.ID+"="+id.toString();
+
+        Cursor cursor = db.rawQuery(sql, new String[] {});
+
+        String res = "";
+        if (cursor.moveToFirst()) {
+            do {
+                res = cursor.getString(cursor.getColumnIndex(folder.col.NAME));
+                break;
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+
+        return res;
+    }
 
 }

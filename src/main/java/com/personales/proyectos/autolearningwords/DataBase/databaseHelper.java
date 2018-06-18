@@ -9,7 +9,7 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.language;
 
 public class databaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "words_v4.db";
+    private static final String DATABASE_NAME = "words_v6.db";
     private static final int DATABASE_SCHEME_VERSION = 1;
 
     public databaseHelper(Context context) {
@@ -24,12 +24,14 @@ public class databaseHelper extends SQLiteOpenHelper {
         }
 
         //Se ejecuta cuando se crea la BD. Aqui creamos las tablas
+        db.execSQL(language.CREATE_TABLE);
         db.execSQL(folder.CREATE_TABLE1);
         db.execSQL(item.CREATE_TABLE2);
-        db.execSQL(language.CREATE_TABLE);
 
         //Creación de índices
         db.execSQL(folder.CREATE_INDEX1);
+        db.execSQL(item.CREATE_INDEX1);
+        db.execSQL(folder.CREATE_INDEX2);
         db.execSQL(item.CREATE_INDEX2);
 
         System.out.println("CREA TABLA");

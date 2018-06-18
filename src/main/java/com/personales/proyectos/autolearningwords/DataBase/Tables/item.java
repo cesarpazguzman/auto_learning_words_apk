@@ -8,6 +8,7 @@ import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Interfaces.tableInterface;
 import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
+import com.personales.proyectos.autolearningwords.Models.session;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,6 +26,7 @@ public class item implements tableInterface {
         public static final String COMMENT = "comment";
         public static final String EXAMPLE1= "example_1";
         public static final String EXAMPLE2= "example_2";
+        public static final String LANG_ID = "language_id";
     }
 
     public static final String CREATE_TABLE2 = "CREATE TABLE "+NAME_TABLE+ "("
@@ -32,10 +34,12 @@ public class item implements tableInterface {
             +col.ORIGINAL+" text not null, "
             +col.TRANSLATION+" text not null, "
             +col.FOLDER_ID+" integer, "
+            +col.LANG_ID+" integer, "
             +col.COMMENT+" text, "
             +col.EXAMPLE1+" text, "
             +col.EXAMPLE2+" text, "
-            +" FOREIGN KEY ("+col.FOLDER_ID+") REFERENCES "+ folder.NAME_TABLE+ "("+folder.col.ID+"));";
+            +" FOREIGN KEY ("+col.FOLDER_ID+") REFERENCES "+ folder.NAME_TABLE+ "("+folder.col.ID+") ON DELETE CASCADE, "
+            +" FOREIGN KEY ("+col.LANG_ID+") REFERENCES "+ language.NAME_TABLE+ "("+language.col.ID+") ON DELETE CASCADE);";
 
     private SQLiteDatabase db;
 
@@ -43,11 +47,15 @@ public class item implements tableInterface {
         this.db = db;
     }
 
-    public static final String CREATE_INDEX2 = "CREATE INDEX "+NAME_TABLE+"_"+col.FOLDER_ID+
+    public static final String CREATE_INDEX1 = "CREATE INDEX "+NAME_TABLE+"_"+col.FOLDER_ID+
             "_index ON "+NAME_TABLE+"("+col.FOLDER_ID+")";
+
+    public static final String CREATE_INDEX2 = "CREATE INDEX "+NAME_TABLE+"_"+col.LANG_ID+
+            "_index ON "+NAME_TABLE+"("+col.LANG_ID+")";
 
 
     public itemVisitable insert(ContentValues vals){
+        vals.put(col.LANG_ID, session.getInstance().get_language_translation());
         db.insert(NAME_TABLE, null, vals);
 
         Cursor cursor = db.rawQuery("SELECT "+ col.ID+" from "+NAME_TABLE+" order by "+ col.ID+ " desc limit 1",
@@ -82,6 +90,8 @@ public class item implements tableInterface {
 
         String sql = "SELECT * from " + NAME_TABLE;
         sql+=" WHERE "+ col.FOLDER_ID+"="+parent;
+        sql+=" AND "+col.LANG_ID+"="+session.getInstance().get_language_translation();
+
         Cursor cursor = db.rawQuery(sql, new String[] {});
 
         if (cursor.moveToFirst()) {
@@ -118,6 +128,8 @@ public class item implements tableInterface {
         ArrayList<itemVisitable> listItems = new ArrayList<itemVisitable>();
 
         String sql = "SELECT * from " + NAME_TABLE;
+        sql+=" WHERE "+col.LANG_ID+"="+ session.getInstance().get_language_translation();
+
         Cursor cursor = db.rawQuery(sql, new String[] {});
 
         if (cursor.moveToFirst()) {
