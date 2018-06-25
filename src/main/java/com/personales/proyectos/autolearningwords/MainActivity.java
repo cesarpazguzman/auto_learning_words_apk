@@ -1,6 +1,5 @@
 package com.personales.proyectos.autolearningwords;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -10,14 +9,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.SubMenu;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.PopupMenu;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -33,9 +29,10 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Dialogs.create_language_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
-import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog;
+import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog_multiple;
+import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog_simple;
 import com.personales.proyectos.autolearningwords.Dialogs.item_dialog;
-import com.personales.proyectos.autolearningwords.Holders.folderViewHolder;
+import com.personales.proyectos.autolearningwords.Dialogs.test_dialog;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
@@ -43,7 +40,6 @@ import com.personales.proyectos.autolearningwords.Models.language_model;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 import com.personales.proyectos.autolearningwords.Models.session;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +51,8 @@ import static com.personales.proyectos.autolearningwords.Holders.folderViewHolde
 
 public class MainActivity extends BaseActivity implements AlertDialogHelper.AlertDialogListener,
                                                           item_dialog.ItemDialogListener, folder_dialog.FolderDialogListener,
-                                                          folders_dialog.ListFoldersDialogListener, SearchView.OnQueryTextListener{
+                                                          folders_dialog_simple.ListFoldersDialogListener,
+                                                          SearchView.OnQueryTextListener, folders_dialog_multiple.ListFoldersMultipleDialogListener{
 
     private custom_adapter custom_adapter;
     @BindView(R.id.rv_general) RecyclerView rv_folders;
@@ -243,13 +240,16 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         }else if(id == R.id.action_more){
             PopupMenu popupMenu = new PopupMenu(this, findViewById(id));
             popupMenu.inflate(R.menu.menu_more);
-            int pr = popupMenu.getMenu().add("PRUEBA").getItemId();
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.test:
+                            System.out.println("ENTRA TEST");
+                            FragmentManager fm = getSupportFragmentManager();
+                            folders_dialog_multiple folders_dialog_frag = folders_dialog_multiple.newInstance();
+                            folders_dialog_frag.show(fm, "new_folders_dialog_multiple");
                             break;
 
                         case R.id.settings:
@@ -354,7 +354,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         }
                     }
 
-                    folders_dialog folders_dialog_frag = folders_dialog.newInstance(folder_ids_selected);
+                    folders_dialog_simple folders_dialog_frag = folders_dialog_simple.newInstance(folder_ids_selected);
                     folders_dialog_frag.show(fm, "new_folders_dialog");
                 default:
                     break;
@@ -604,5 +604,20 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     @Override
     public boolean onQueryTextSubmit(String s) {
         return false;
+    }
+
+    @Override
+    public void onChoiceMultiple(ArrayList<Integer> folders_selected) {
+        item table_item = (item)db_manager.get_table_instance("item");
+        ArrayList<itemVisitable> items_to_test = new ArrayList<>();
+        for(int folder_id:folders_selected){
+            items_to_test.addAll(table_item.get_all_elements(folder_id));
+        }
+
+        if(items_to_test.size()>0){
+            FragmentManager fm = getSupportFragmentManager();
+            test_dialog folders_dialog_frag = test_dialog.newInstance(items_to_test);
+            folders_dialog_frag.show(fm, "new_test_dialog");
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,13 +20,12 @@ import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class folders_dialog extends DialogFragment {
+public class folders_dialog_simple extends DialogFragment {
     public interface ListFoldersDialogListener {
         void onMoveItemsDialog(int parent_id);
     }
@@ -39,12 +39,12 @@ public class folders_dialog extends DialogFragment {
     private int current_selection = -1;
 
     private ArrayList<Integer> folder_ids_selected;
-    public folders_dialog(){
+    public folders_dialog_simple(){
         elements_list = new ArrayList<>();
     }
 
-    public static folders_dialog newInstance(ArrayList<Integer> folder_ids_selected) {
-        folders_dialog frag = new folders_dialog();
+    public static folders_dialog_simple newInstance(ArrayList<Integer> folder_ids_selected) {
+        folders_dialog_simple frag = new folders_dialog_simple();
         frag.folder_ids_selected = folder_ids_selected;
         return frag;
     }
@@ -75,10 +75,11 @@ public class folders_dialog extends DialogFragment {
         databaseManager db_manager = databaseManager.getInstance(getContext());
         ArrayList<itemVisitable> folders = db_manager.get_table_instance(folder.NAME_TABLE).get_all_elements();
 
-        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, get_items_sorted(folders, 0, 0));
+        adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_single_choice,
+                get_items_sorted(folders, 0, 0,""));
 
         list_folders.setAdapter(adapter);
-
+        list_folders.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list_folders.setOnItemClickListener(list_folders_listener());
 
         bt_close.setOnClickListener(new View.OnClickListener() {
@@ -105,18 +106,20 @@ public class folders_dialog extends DialogFragment {
         return new String(new char[count]).replace("\0", with);
     }
 
-    private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level){
+    private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level, String number){
         ArrayList<String> r = new ArrayList<>();
         if(parent_id == 0){
             r.add("PRINCIPAL");
             elements_list.add(0);
         }
+        int count = 1;
         for(itemVisitable item : items){
             if(item.getParent_id() == parent_id && !folder_ids_selected.contains(item.getId())) {
                 int level2 = level +1;
-                r.add(repeat(level2, "     ")+"/"+item.getName());
+                r.add(number+count+"- "+item.getName());
+                //r.add(repeat(level2, "     ")+"/"+item.getName());
                 elements_list.add(item.getId());
-                r.addAll(get_items_sorted(items,item.getId(), level2));
+                r.addAll(get_items_sorted(items,item.getId(), level2, number+count+"."));
             }
         }
 
@@ -127,6 +130,7 @@ public class folders_dialog extends DialogFragment {
         return new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
+                int a = list_folders.getCheckedItemPosition();
                 current_selection = elements_list.get(pos);
             }
         };
