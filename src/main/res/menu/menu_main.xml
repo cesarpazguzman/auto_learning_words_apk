@@ -5,12 +5,12 @@
 
     <item
         android:id="@+id/action_language"
-        android:title="  IDIOMA  "
+        android:title="@string/language_menu"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_more"
-        android:title="  MÁS  "
+        android:title="@string/more_menu"
         app:showAsAction="always" />
     <item
         xmlns:android="http://schemas.android.com/apk/res/android"

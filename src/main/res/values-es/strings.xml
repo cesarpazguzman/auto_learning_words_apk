@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">autolearningWords</string>
+    <string name="action_settings">Settings</string>
+    <string name="img_folder">icon folder</string>
+    <string name="button1_dialog_new">Guardar y cerrar</string>
+    <string name="button2_dialog_new">Guardar y nuevo</string>
+
+    <string name="save">GUARDAR</string>
+    <string name="close">CERRAR</string>
+    <string name="name">Nombre</string>
+    <string name="new_language">NUEVO IDIOMA</string>
+    <string name="new_folder">NUEVA CARPETA</string>
+
+    <string name="translation">TRADUCCIÓN</string>
+    <string name="examples">EJEMPLOS</string>
+    <string name="original">ORIGINAL</string>
+    <string name="example1">Ejemplo 1</string>
+    <string name="example2">Ejemplo 2</string>
+    <string name="comment">COMENTARIOS</string>
+
+    <string name="item">Elemento</string>
+    <string name="folder">Carpeta</string>
+    <string name="add_language">AÑADIR IDIOMA</string>
+
+    <string name="language_menu">  IDIOMA  </string>
+    <string name="more_menu">  MÁS  </string>
+</resources>

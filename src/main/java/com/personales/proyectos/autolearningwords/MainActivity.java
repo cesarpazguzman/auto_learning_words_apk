@@ -280,7 +280,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 sMenu.add(0, 201+i, 0, "Eliminar");
             }
 
-            popupMenu.getMenu().add(0,100,0,"AÑADIR IDIOMA");
+            popupMenu.getMenu().add(0,100,0,R.string.add_language);
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
@@ -302,7 +302,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     else if(item.getItemId()>200){
                         db_manager.delete(language.NAME_TABLE, languages.get(-201+item.getItemId()).getId());
                         if(languages.size()<=1){
-                            menu_principal.getItem(0).setTitle("IDIOMA");
+                            menu_principal.getItem(0).setTitle(R.string.language_menu);
                         }
                         if(languages.get(-201+item.getItemId()).getId() == session.getInstance().get_language_translation()){
                             _session.set_language_translation(-1);

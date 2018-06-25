@@ -11,7 +11,7 @@
     <item
         android:id="@+id/settings"
         app:showAsAction="always"
-        android:title="Configuración"
+        android:title="Idioma"
         android:visible="true" />
     <item
         android:id="@+id/export_data"
