@@ -109,7 +109,7 @@ public class folders_dialog_simple extends DialogFragment {
     private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level, String number){
         ArrayList<String> r = new ArrayList<>();
         if(parent_id == 0){
-            r.add("PRINCIPAL");
+            r.add(getResources().getString(R.string.main));
             elements_list.add(0);
         }
         int count = 1;

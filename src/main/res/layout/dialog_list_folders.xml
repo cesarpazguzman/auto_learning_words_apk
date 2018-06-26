@@ -18,10 +18,10 @@
             android:id="@+id/text_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginHorizontal="16dp"
             android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Seleccione la carpeta a la cual mover los elementos seleccionados"
+            android:text="@string/select_folder_move"
             android:textSize="18sp" />
 
         <ListView
@@ -51,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
-                android:text="MOVER"
+                android:text="@string/move"
                 android:theme="@style/PrimaryFlatButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -63,7 +63,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="CERRAR"
+                android:text="@string/close"
                 android:theme="@style/PrimaryFlatButton"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/bt_move"

@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/action_move"
-        android:title="MOVER"
+        android:title="@string/move"
         app:showAsAction="always" />
 
     <item android:id="@+id/action_delete"

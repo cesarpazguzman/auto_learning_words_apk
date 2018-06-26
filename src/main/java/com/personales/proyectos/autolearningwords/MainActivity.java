@@ -206,7 +206,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         searchView.setOnQueryTextListener(this);
 
         menu_principal = menu;
-        menu_principal.getItem(0).setTitle(_session.get_language_translation() == -1 ?"IDIOMA":
+        menu_principal.getItem(0).setTitle(_session.get_language_translation() == -1 ?getResources().getString(R.string.language_menu):
                 ((language)(db_manager.get_table_instance(language.NAME_TABLE))).get_name(_session.get_language_translation()));
 
         return super.onCreateOptionsMenu(menu);
@@ -246,7 +246,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.test:
-                            System.out.println("ENTRA TEST");
                             FragmentManager fm = getSupportFragmentManager();
                             folders_dialog_multiple folders_dialog_frag = folders_dialog_multiple.newInstance();
                             folders_dialog_frag.show(fm, "new_folders_dialog_multiple");
@@ -276,8 +275,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             final ArrayList<language_model> languages = db_manager.get_table_instance(language.NAME_TABLE).get_all_elements();
             for(int i=0;i<languages.size();++i){
                 SubMenu sMenu = popupMenu.getMenu().addSubMenu(0,languages.get(i).getId(),0,languages.get(i).getName());
-                sMenu.add(0, 101+i, 0, "Seleccionar");
-                sMenu.add(0, 201+i, 0, "Eliminar");
+                sMenu.add(0, 101+i, 0, R.string.select_min);
+                sMenu.add(0, 201+i, 0, R.string.remove_min);
             }
 
             popupMenu.getMenu().add(0,100,0,R.string.add_language);
@@ -341,9 +340,11 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    alertDialogHelper.showAlertDialog("","Desea eliminar los "+
-                                    ((Integer)custom_adapter.get_selected_items().size()).toString()+" elementos seleccionados?",
-                            "ELIMINAR","CANCELAR", "", 1, true, null);
+                    alertDialogHelper.showAlertDialog("",getResources().getString(R.string.remove_items)+" "+
+                                    ((Integer)custom_adapter.get_selected_items().size()).toString()+" "+
+                                    getResources().getString(R.string.items_selected),
+                            getResources().getString(R.string.delete),
+                            getResources().getString(R.string.cancel), "", 1, true, null);
                     return true;
                 case R.id.action_move:
                     FragmentManager fm = getSupportFragmentManager();
@@ -382,9 +383,9 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
                 final ArrayList<itemVisitable> selecte_items_aux = custom_adapter.get_selected_items();
 
-                String message = " eliminado";
+                String message = " "+getResources().getString(R.string.removed);
                 if(custom_adapter.get_selected_items().size()>1){
-                    message +="s";
+                    //message +="s";
                 }
                 Snackbar snackbar = Snackbar.make(rv_folders, custom_adapter.get_selected_items().size()+message, Snackbar.LENGTH_LONG);
 
@@ -410,7 +411,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
                     }
                 });
-                snackbar.setAction("DESHACER ", new View.OnClickListener() {
+                snackbar.setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         for(int i=0;i<selecte_items_aux.size();i++){
@@ -563,14 +564,14 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 custom_adapter.remove_element(items);
             }
         }
-        String name_folder = "PRINCIPAL";
+        String name_folder = getResources().getString(R.string.main);
         for(itemVisitable item:custom_adapter.get_viewModels()){
             if(item.getId()==parent_id) {
                 name_folder = item.getName();
                 break;
             }
         }
-        Toast.makeText(this, "Se han movido los elementos seleccionados a la carpeta "+name_folder, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.select_items_move)+" "+name_folder, Toast.LENGTH_LONG).show();
     }
 
     @Override

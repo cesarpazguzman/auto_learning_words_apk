@@ -23,4 +23,31 @@
     <string name="add_language">ADD LANGUAGE</string>
     <string name="language_menu">  LANGUAGE  </string>
     <string name="more_menu">  MORE  </string>
+
+    <string name="select_folder_move">Select the folder to move selected items</string>
+    <string name="move">MOVE</string>
+
+    <string name="accept">ACCEPT</string>
+    <string name="failed">FAILED</string>
+    <string name="correct">CORRECT</string>
+    <string name="see_answer">SEE ANSWER</string>
+
+    <string name="do_test">DO TEST</string>
+    <string name="select_folder_test">Select folders to do the test</string>
+    <string name="main">MAIN</string>
+
+    <string name="comment_min">Comment</string>
+    <string name="delete">DELETE</string>
+    <string name="cancel">CANCEL</string>
+
+    <string name="select_items_move">Selected items were moved to </string>
+    <string name="undo">UNDO</string>
+    <string name="removed">removed</string>
+
+    <string name="remove_items">Do you want to remove </string>
+    <string name="items_selected">items selected?</string>
+
+    <string name="select_min">Select</string>
+    <string name="remove_min">Remove</string>
+
 </resources>

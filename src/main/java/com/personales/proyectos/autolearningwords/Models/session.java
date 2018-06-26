@@ -12,6 +12,7 @@ public class session {
     private session(Context ctx){
         prefs = ctx.getSharedPreferences("tab_app",Context.MODE_PRIVATE);
         editor = prefs.edit();
+
     }
 
     public static session getInstance(final Context context){

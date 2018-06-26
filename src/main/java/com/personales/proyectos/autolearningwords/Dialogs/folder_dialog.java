@@ -75,7 +75,7 @@ public class folder_dialog extends DialogFragment {
         if(!new_folder){
             fill_values();
             bt_save_close.setVisibility(View.INVISIBLE);
-            bt_save_new.setText("Guardar");
+            bt_save_new.setText(R.string.save);
             bt_close_item.setGravity(Gravity.CENTER);
         }
 

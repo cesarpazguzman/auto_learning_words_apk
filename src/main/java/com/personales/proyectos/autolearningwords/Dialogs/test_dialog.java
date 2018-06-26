@@ -129,7 +129,7 @@ public class test_dialog extends DialogFragment {
             ++current_word;
             counter_words.setText(current_word+"/"+all_words.size());
             test_original.setText(all_words.get(current_word-1).getName());
-            test_traduccion.setText("VER RESPUESTA");
+            test_traduccion.setText(R.string.see_answer);
             test_examples.setVisibility(View.INVISIBLE);
             test_examples.setText("");
             bt_fail.setVisibility(View.GONE);
@@ -141,23 +141,23 @@ public class test_dialog extends DialogFragment {
         String string_final = "";
         item_model viewModel = (item_model) all_words.get(current_word-1);
         if(!viewModel.getExample1().isEmpty()){
-            string_final += "Ejemplo 1: "+viewModel.getExample1();
+            string_final += R.string.example1+": "+viewModel.getExample1();
             if(!viewModel.getExample2().isEmpty() || !viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getExample2().isEmpty()){
-            string_final += "Ejemplo 2: "+viewModel.getExample2();
+            string_final += R.string.example2+": "+viewModel.getExample2();
             if(!viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getComment().isEmpty()){
-            string_final += "Comentario: "+viewModel.getComment();
+            string_final += R.string.comment_min+": "+viewModel.getComment();
         }
 
         SpannableStringBuilder str = new SpannableStringBuilder(string_final);
-        str = set_text_bold(str, "Ejemplo 1:", string_final);
-        str = set_text_bold(str, "Ejemplo 2:", string_final);
-        str = set_text_bold(str, "Comentario:", string_final);
+        str = set_text_bold(str, R.string.example1+":", string_final);
+        str = set_text_bold(str, R.string.example2+":", string_final);
+        str = set_text_bold(str, R.string.comment_min+":", string_final);
         return str;
     }
 

@@ -64,23 +64,23 @@ public class itemViewHolder extends baseViewHolder<item_model> {
     private SpannableStringBuilder text_examples(){
         String string_final = "";
         if(!viewModel.getExample1().isEmpty()){
-            string_final += "Ejemplo 1: "+viewModel.getExample1();
+            string_final += R.string.example1+": "+viewModel.getExample1();
             if(!viewModel.getExample2().isEmpty() || !viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getExample2().isEmpty()){
-            string_final += "Ejemplo 2: "+viewModel.getExample2();
+            string_final += R.string.example2+": "+viewModel.getExample2();
             if(!viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getComment().isEmpty()){
-            string_final += "Comentario: "+viewModel.getComment();
+            string_final += R.string.comment_min+": "+viewModel.getComment();
         }
 
         SpannableStringBuilder str = new SpannableStringBuilder(string_final);
-        str = set_text_bold(str, "Ejemplo 1:", string_final);
-        str = set_text_bold(str, "Ejemplo 2:", string_final);
-        str = set_text_bold(str, "Comentario:", string_final);
+        str = set_text_bold(str, R.string.example1+":", string_final);
+        str = set_text_bold(str, R.string.example2+":", string_final);
+        str = set_text_bold(str, R.string.comment_min+":", string_final);
         return str;
     }
 

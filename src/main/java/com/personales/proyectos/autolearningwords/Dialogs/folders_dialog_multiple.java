@@ -46,7 +46,6 @@ public class folders_dialog_multiple extends DialogFragment {
     public folders_dialog_multiple(){
         elements_list = new ArrayList<>();
         current_selection = new ArrayList<>();
-        System.out.println("Llega4");
     }
 
     public static folders_dialog_multiple newInstance() {
@@ -77,8 +76,8 @@ public class folders_dialog_multiple extends DialogFragment {
 
         ButterKnife.bind(this, view);
 
-        bt_do_test.setText("Hacer Test");
-        text_info.setText("Seleccione las carpetas sobre las cuales desea hacer el test");
+        bt_do_test.setText(R.string.do_test);
+        text_info.setText(R.string.select_folder_test);
 
         databaseManager db_manager = databaseManager.getInstance(getContext());
         ArrayList<itemVisitable> folders = db_manager.get_table_instance(folder.NAME_TABLE).get_all_elements();
@@ -117,7 +116,7 @@ public class folders_dialog_multiple extends DialogFragment {
     private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level, String number){
         ArrayList<String> r = new ArrayList<>();
         if(parent_id == 0){
-            r.add("PRINCIPAL");
+            r.add(getResources().getString(R.string.main));
             elements_list.add(0);
         }
         int count = 1;
