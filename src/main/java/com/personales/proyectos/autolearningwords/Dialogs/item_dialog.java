@@ -1,5 +1,6 @@
 package com.personales.proyectos.autolearningwords.Dialogs;
 
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -37,7 +38,8 @@ public class item_dialog extends DialogFragment {
     @BindView(R.id.bt_save_close) Button bt_save_close;
     @BindView(R.id.bt_save_new) Button bt_save_new;
     @BindView(R.id.bt_close_item) Button bt_close_item;
-
+    @BindView(R.id.til_original)
+    TextInputLayout til_original;
     //true if item is being modified, false if item is being created
     private boolean new_item = true;
     private InputMethodManager imm;
@@ -150,6 +152,10 @@ public class item_dialog extends DialogFragment {
     }
 
     private void save(boolean open_again){
+        if(et_item_original== null || et_item_original.getText().toString().equals("")){
+            til_original.setError("*Campo obligatorio");
+            return;
+        }
         String comment = !et_comments.getText().toString().isEmpty() ? et_comments.getText().toString() : "";
         String example1 = !et_example_one.getText().toString().isEmpty() ? et_example_one.getText().toString() : "";
         String example2 = !et_example_two.getText().toString().isEmpty() ? et_example_two.getText().toString() : "";

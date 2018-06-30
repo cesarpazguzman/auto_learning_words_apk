@@ -52,4 +52,10 @@
     <string name="select_min">Seleccionar</string>
     <string name="remove_min">Eliminar</string>
 
+    <string name="do_test_menu">Hacer test</string>
+    <string name="help_menu">Ayuda</string>
+    <string name="contact_menu">Contacto</string>
+    <string name="export_data_menu">Exportar base de datos</string>
+    <string name="import_data_menu">Importar base de datos</string>
+
 </resources>

@@ -2,6 +2,7 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -25,6 +26,8 @@ public class folder_dialog extends DialogFragment {
     @BindView(R.id.bt_save_close) Button bt_save_close;
     @BindView(R.id.bt_save_new) Button bt_save_new;
     @BindView(R.id.bt_close_item) Button bt_close_item;
+    @BindView(R.id.til_folder_name)
+    TextInputLayout til_folder_name;
 
     //true if item is being modified, false if item is being created
     private boolean new_folder = true;
@@ -106,6 +109,10 @@ public class folder_dialog extends DialogFragment {
     }
 
     private void save(boolean open_again){
+        if(et_folder_name== null || et_folder_name.getText().toString().equals("")){
+            til_folder_name.setError("*Campo obligatorio");
+            return;
+        }
         FolderDialogListener listener = (FolderDialogListener) getActivity();
         if(new_folder){
             listener.onSaveFolderDialog(et_folder_name.getText().toString(), open_again, -1);

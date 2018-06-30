@@ -50,4 +50,9 @@
     <string name="select_min">Select</string>
     <string name="remove_min">Remove</string>
 
+    <string name="do_test_menu">Do test</string>
+    <string name="help_menu">Help</string>
+    <string name="contact_menu">Contact</string>
+    <string name="export_data_menu">Export database</string>
+    <string name="import_data_menu">Import database</string>
 </resources>

@@ -1,10 +1,14 @@
 package com.personales.proyectos.autolearningwords.Dialogs;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,6 +93,9 @@ public class folders_dialog_multiple extends DialogFragment {
         list_folders.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
         list_folders.setOnItemClickListener(list_folders_listener());
 
+        bt_close.setEnabled(false);
+        bt_do_test.setEnabled(false);
+
         bt_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -104,8 +111,8 @@ public class folders_dialog_multiple extends DialogFragment {
             }
         });
 
-        getDialog().getWindow().setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
+
+        getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
     }
 
@@ -144,6 +151,9 @@ public class folders_dialog_multiple extends DialogFragment {
                 {
                     current_selection.add(elements_list.get(a.keyAt(i)));
                 }
+
+                bt_close.setEnabled(list_folders.getCheckedItemCount()!=0);
+                bt_do_test.setEnabled(list_folders.getCheckedItemCount()!=0);
             }
         };
     }

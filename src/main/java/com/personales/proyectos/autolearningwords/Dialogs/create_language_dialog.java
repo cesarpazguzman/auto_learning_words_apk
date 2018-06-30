@@ -2,6 +2,7 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,6 +29,8 @@ public class create_language_dialog extends DialogFragment {
     @BindView(R.id.bt_save)
     Button bt_save;
     @BindView(R.id.bt_close) Button bt_close;
+    @BindView(R.id.til_lang_name)
+    TextInputLayout til_lang_name;
 
     public create_language_dialog(){
 
@@ -81,6 +84,11 @@ public class create_language_dialog extends DialogFragment {
     }
 
     private void save(){
+
+        if(et_lang_name== null || et_lang_name.getText().toString().equals("")){
+            til_lang_name.setError("*Campo obligatorio");
+            return;
+        }
 
         Map<String, Object> map_vals = new HashMap<>();
         map_vals.put(language.col.NAME, et_lang_name.getText().toString().toUpperCase());

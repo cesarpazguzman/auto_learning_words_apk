@@ -1,11 +1,13 @@
 package com.personales.proyectos.autolearningwords;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.view.ActionMode;
@@ -28,6 +30,7 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Dialogs.create_language_dialog;
+import com.personales.proyectos.autolearningwords.Dialogs.dialog_warning;
 import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog_multiple;
 import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog_simple;
@@ -226,11 +229,15 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.add_folder:
-                            add_folder_dialog();
+                            if(!warning_language()) {
+                                add_folder_dialog();
+                            }
                             break;
 
                         case R.id.add_item:
-                            add_element_dialog();
+                            if(!warning_language()) {
+                                add_element_dialog();
+                            }
                             break;
                     }
                     return false;
@@ -246,13 +253,13 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 public boolean onMenuItemClick(MenuItem item) {
                     switch (item.getItemId()) {
                         case R.id.test:
-                            FragmentManager fm = getSupportFragmentManager();
-                            folders_dialog_multiple folders_dialog_frag = folders_dialog_multiple.newInstance();
-                            folders_dialog_frag.show(fm, "new_folders_dialog_multiple");
+                            if(!warning_language()){
+                                FragmentManager fm = getSupportFragmentManager();
+                                folders_dialog_multiple folders_dialog_frag = folders_dialog_multiple.newInstance();
+                                folders_dialog_frag.show(fm, "new_folders_dialog_multiple");
+                            }
                             break;
 
-                        case R.id.settings:
-                            break;
                         case R.id.export_data:
                             break;
 
@@ -283,7 +290,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
             popupMenu.show();
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
-                public boolean onMenuItemClick(MenuItem item) {
+                public boolean onMenuItemClick(final MenuItem item) {
                     if(item.getItemId() == 100){
                         FragmentManager fm = getSupportFragmentManager();
                         create_language_dialog create_language_dialog_frag = create_language_dialog.newInstance();
@@ -299,17 +306,30 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         //update_list_items();
                     }
                     else if(item.getItemId()>200){
-                        db_manager.delete(language.NAME_TABLE, languages.get(-201+item.getItemId()).getId());
-                        if(languages.size()<=1){
-                            menu_principal.getItem(0).setTitle(R.string.language_menu);
-                        }
-                        if(languages.get(-201+item.getItemId()).getId() == session.getInstance().get_language_translation()){
-                            _session.set_language_translation(-1);
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                            startActivity(intent);
-                        }
-
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("Va a eliminar un idioma, eso implica que se eliminarán todas sus palabras, desea continuar?")
+                                .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                        // FIRE ZE MISSILES!
+                                        db_manager.delete(language.NAME_TABLE, languages.get(-201+item.getItemId()).getId());
+                                        if(languages.size()<=1){
+                                            menu_principal.getItem(0).setTitle(R.string.language_menu);
+                                        }
+                                        if(languages.get(-201+item.getItemId()).getId() == session.getInstance().get_language_translation()){
+                                            _session.set_language_translation(-1);
+                                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
+                                            startActivity(intent);
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+                                    }
+                                });
+                        // Create the AlertDialog object and return it
+                        builder.create();
+                        builder.show();
 
                     }
                     return false;
@@ -321,7 +341,15 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         return super.onOptionsItemSelected(item);
     }
 
-
+    private boolean warning_language(){
+        if(session.getInstance().get_language_translation()==-1){
+            FragmentManager fm = getSupportFragmentManager();
+            dialog_warning dialog_warning_frag = dialog_warning.newInstance("Debe escoger un idioma para hacer esta acción");
+            dialog_warning_frag.show(fm, "new_folder_dialog");
+            return true;
+        }
+        return false;
+    }
     private ActionMode.Callback mActionModeCallback = new ActionMode.Callback() {
 
         @Override

@@ -1,12 +1,16 @@
 package com.personales.proyectos.autolearningwords.Dialogs;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -103,10 +107,38 @@ public class test_dialog extends DialogFragment {
             }
         });
 
+        setCancelable(false);
+
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
-
     }
+
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new Dialog(getActivity(), getTheme()){
+            @Override
+            public void onBackPressed() {
+                //do your stuff
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                builder.setMessage("Va a cancelar el test, desea continuar?")
+                        .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                // FIRE ZE MISSILES!
+                                test_dialog.this.dismiss();
+                            }
+                        })
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                            }
+                        });
+                // Create the AlertDialog object and return it
+                builder.create();
+                builder.show();
+            }
+        };
+    }
+
+
 
     private void see_answer(){
         test_traduccion.setText(((item_model)(all_words.get(current_word-1))).getTranslation());

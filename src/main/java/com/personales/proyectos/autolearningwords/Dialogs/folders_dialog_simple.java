@@ -82,6 +82,9 @@ public class folders_dialog_simple extends DialogFragment {
         list_folders.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list_folders.setOnItemClickListener(list_folders_listener());
 
+        bt_close.setEnabled(false);
+        bt_move.setEnabled(false);
+
         bt_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

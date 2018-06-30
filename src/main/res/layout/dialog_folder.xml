@@ -27,25 +27,31 @@
         android:textColor="@color/toolbar_text_color"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/et_folder_name"
+        app:layout_constraintBottom_toTopOf="@+id/til_folder_name"
         app:layout_constraintStart_toEndOf="@+id/icon_item_dialog"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_folder_name"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/til_folder_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:hint="@string/name"
-        android:inputType="textCapSentences|textMultiLine"
-        android:maxLines="1"
-        android:textSize="24sp"
+        app:errorEnabled="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/icon_item_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/icon_item_dialog">
+        <EditText
+            android:id="@+id/et_folder_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="1"
+            android:textSize="24sp" />
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/bt_save_new"
@@ -58,7 +64,7 @@
         android:theme="@style/PrimaryFlatButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/et_folder_name"
+        app:layout_constraintTop_toBottomOf="@+id/til_folder_name"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
