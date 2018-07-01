@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class folders_dialog_simple extends DialogFragment {
+public class folders_dialog_simple extends dialog_parent {
     public interface ListFoldersDialogListener {
         void onMoveItemsDialog(int parent_id);
     }
@@ -39,31 +39,18 @@ public class folders_dialog_simple extends DialogFragment {
     private int current_selection = -1;
 
     private ArrayList<Integer> folder_ids_selected;
+
     public folders_dialog_simple(){
+        super();
         elements_list = new ArrayList<>();
+        layout = R.layout.dialog_list_folders;
+        layout_height = ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
     public static folders_dialog_simple newInstance(ArrayList<Integer> folder_ids_selected) {
         folders_dialog_simple frag = new folders_dialog_simple();
         frag.folder_ids_selected = folder_ids_selected;
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_list_folders, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override
@@ -103,10 +90,6 @@ public class folders_dialog_simple extends DialogFragment {
         getDialog().getWindow().setSoftInputMode(
                 WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-    }
-
-    public static String repeat(int count, String with) {
-        return new String(new char[count]).replace("\0", with);
     }
 
     private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level, String number){

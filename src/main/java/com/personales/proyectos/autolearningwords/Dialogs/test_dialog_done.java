@@ -18,19 +18,18 @@ import org.w3c.dom.Text;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class test_dialog_done extends DialogFragment {
+public class test_dialog_done extends dialog_parent {
 
-    @BindView(R.id.text_correct)
-    TextView text_correct;
-    @BindView(R.id.text_failed)
-    TextView text_failed;
-    @BindView(R.id.bt_close_test)
-    Button bt_close_test;
+    @BindView(R.id.text_correct) TextView text_correct;
+    @BindView(R.id.text_failed) TextView text_failed;
+    @BindView(R.id.bt_close_test) Button bt_close_test;
 
     private int correct = 0;
     private int failed = 0;
 
     public test_dialog_done(){
+        super();
+        layout = R.layout.dialog_test_done;
     }
 
     public static test_dialog_done newInstance(int correct, int failed) {
@@ -38,23 +37,6 @@ public class test_dialog_done extends DialogFragment {
         frag.correct = correct;
         frag.failed = failed;
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_test_done, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override

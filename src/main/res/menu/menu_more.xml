@@ -25,9 +25,4 @@
         app:showAsAction="always"
         android:title="@string/contact_menu"
         android:visible="true"/>
-    <item
-        android:id="@+id/help"
-        app:showAsAction="always"
-        android:title="@string/help_menu"
-        android:visible="true" />
 </menu>

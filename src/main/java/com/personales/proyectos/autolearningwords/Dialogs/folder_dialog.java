@@ -17,7 +17,7 @@ import com.personales.proyectos.autolearningwords.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class folder_dialog extends DialogFragment {
+public class folder_dialog extends dialog_parent {
     public interface FolderDialogListener {
         void onSaveFolderDialog(String name, boolean open_again, int folder_id);
     }
@@ -26,14 +26,14 @@ public class folder_dialog extends DialogFragment {
     @BindView(R.id.bt_save_close) Button bt_save_close;
     @BindView(R.id.bt_save_new) Button bt_save_new;
     @BindView(R.id.bt_close_item) Button bt_close_item;
-    @BindView(R.id.til_folder_name)
-    TextInputLayout til_folder_name;
+    @BindView(R.id.til_folder_name) TextInputLayout til_folder_name;
 
     //true if item is being modified, false if item is being created
     private boolean new_folder = true;
 
     public folder_dialog(){
-
+        super();
+        layout = R.layout.dialog_folder;
     }
 
     public static folder_dialog newInstance(int folder_id, String name) {
@@ -50,23 +50,6 @@ public class folder_dialog extends DialogFragment {
         folder_dialog frag = new folder_dialog();
         frag.new_folder = true;
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_folder, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override

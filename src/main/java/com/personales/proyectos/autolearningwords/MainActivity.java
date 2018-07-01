@@ -268,9 +268,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
                         case R.id.contact:
                             break;
-
-                        case R.id.help:
-                            break;
                     }
                     return false;
                 }

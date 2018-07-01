@@ -21,13 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-public class item_dialog extends DialogFragment {
+public class item_dialog extends dialog_parent {
+
     public interface ItemDialogListener {
         void onSaveItemDialog(String original, String traduccion, String example_1,
                               String example_2, String comment, boolean open_again,
                               int item_id);
     }
-
 
     @BindView(R.id.add_example_item) ImageButton add_example_item;
     @BindView(R.id.et_item_original) EditText et_item_original;
@@ -38,14 +38,15 @@ public class item_dialog extends DialogFragment {
     @BindView(R.id.bt_save_close) Button bt_save_close;
     @BindView(R.id.bt_save_new) Button bt_save_new;
     @BindView(R.id.bt_close_item) Button bt_close_item;
-    @BindView(R.id.til_original)
-    TextInputLayout til_original;
+    @BindView(R.id.til_original) TextInputLayout til_original;
+
     //true if item is being modified, false if item is being created
     private boolean new_item = true;
     private InputMethodManager imm;
 
     public item_dialog(){
-
+        super();
+        layout = R.layout.dialog_item;
     }
 
     public static item_dialog newInstance(int item_id, String original, String traduccion, String example_1,
@@ -67,26 +68,6 @@ public class item_dialog extends DialogFragment {
         item_dialog frag = new item_dialog();
         frag.new_item = true;
         return frag;
-    }
-
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_item, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
-
-
     }
 
     @Override

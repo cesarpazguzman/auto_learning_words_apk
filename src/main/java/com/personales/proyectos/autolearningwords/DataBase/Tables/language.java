@@ -24,10 +24,13 @@ public class language implements tableInterface {
 
     public static final String CREATE_TABLE = "CREATE TABLE "+NAME_TABLE+ "("
             + col.ID+" integer primary key autoincrement,"
-            + col.NAME+" text not null);";
+            + col.NAME+" text not null) ;";
 
 
     public language_model insert(ContentValues vals){
+        if(exist_language(vals.getAsString(col.NAME))){
+            return null;
+        }
         db.insert(NAME_TABLE, null, vals);
 
         Cursor cursor = db.rawQuery("SELECT "+ col.ID+" from "+NAME_TABLE+" order by "+ col.ID+ " desc limit 1",
@@ -94,5 +97,19 @@ public class language implements tableInterface {
 
         return res;
     }
+
+    private boolean exist_language(String name){
+        String sql = "SELECT * from "+NAME_TABLE+" WHERE "+col.NAME+" = "+'"'+name+'"';
+
+        Cursor cursor = db.rawQuery(sql, new String[]{});
+        boolean res = false;
+        if(cursor.moveToFirst()){
+            res = true;
+        }
+        cursor.close();
+        return res;
+    }
+
+
 
 }

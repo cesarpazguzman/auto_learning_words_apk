@@ -30,48 +30,31 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class folders_dialog_multiple extends DialogFragment {
+public class folders_dialog_multiple extends dialog_parent {
     public interface ListFoldersMultipleDialogListener {
         void onChoiceMultiple(ArrayList<Integer> folders_selected);
     }
 
-    @BindView(R.id.list_folders)
-    ListView list_folders;
-    @BindView(R.id.bt_move)
-    Button bt_do_test;
+    @BindView(R.id.list_folders) ListView list_folders;
+    @BindView(R.id.bt_move) Button bt_do_test;
     @BindView(R.id.bt_close) Button bt_close;
-    @BindView(R.id.text_info)
-    TextView text_info;
+    @BindView(R.id.text_info) TextView text_info;
 
     private ArrayAdapter<String> adapter;
     private ArrayList<Integer> elements_list;
     private ArrayList<Integer> current_selection;
 
     public folders_dialog_multiple(){
+        super();
         elements_list = new ArrayList<>();
         current_selection = new ArrayList<>();
+        layout = R.layout.dialog_list_folders;
+        layout_height = ViewGroup.LayoutParams.MATCH_PARENT;
     }
 
     public static folders_dialog_multiple newInstance() {
         folders_dialog_multiple frag = new folders_dialog_multiple();
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_list_folders, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override
@@ -114,10 +97,6 @@ public class folders_dialog_multiple extends DialogFragment {
 
         getDialog().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE);
 
-    }
-
-    public static String repeat(int count, String with) {
-        return new String(new char[count]).replace("\0", with);
     }
 
     private ArrayList<String> get_items_sorted(ArrayList<itemVisitable> items, int parent_id, int level, String number){

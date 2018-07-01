@@ -28,51 +28,29 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class test_dialog extends DialogFragment {
+public class test_dialog extends dialog_parent {
 
-    @BindView(R.id.counter_words)
-    TextView counter_words;
-    @BindView(R.id.test_original)
-    TextView test_original;
-    @BindView(R.id.fail_button)
-    ImageButton bt_fail;
-    @BindView(R.id.correct_button)
-    ImageButton bt_correct;
-    @BindView(R.id.test_traduccion)
-    TextView test_traduccion;
-    @BindView(R.id.test_examples)
-    TextView test_examples;
+    @BindView(R.id.counter_words) TextView counter_words;
+    @BindView(R.id.test_original) TextView test_original;
+    @BindView(R.id.fail_button) ImageButton bt_fail;
+    @BindView(R.id.correct_button) ImageButton bt_correct;
+    @BindView(R.id.test_traduccion) TextView test_traduccion;
+    @BindView(R.id.test_examples) TextView test_examples;
 
     private ArrayList<itemVisitable> failed_words;
     private ArrayList<itemVisitable> all_words;
     private int current_word = 0;
 
-
     public test_dialog(){
+        super();
         failed_words = new ArrayList<>();
+        layout = R.layout.dialog_test;
     }
 
     public static test_dialog newInstance(ArrayList<itemVisitable> all_words) {
         test_dialog frag = new test_dialog();
         frag.all_words = all_words;
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dialog_test, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override

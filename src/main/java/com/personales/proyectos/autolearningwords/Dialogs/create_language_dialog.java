@@ -3,11 +3,7 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,40 +18,21 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class create_language_dialog extends DialogFragment {
+public class create_language_dialog extends dialog_parent {
 
-    @BindView(R.id.et_lang_name)
-    EditText et_lang_name;
-    @BindView(R.id.bt_save)
-    Button bt_save;
+    @BindView(R.id.et_lang_name) EditText et_lang_name;
+    @BindView(R.id.bt_save) Button bt_save;
     @BindView(R.id.bt_close) Button bt_close;
-    @BindView(R.id.til_lang_name)
-    TextInputLayout til_lang_name;
+    @BindView(R.id.til_lang_name) TextInputLayout til_lang_name;
 
     public create_language_dialog(){
-
+        super();
+        layout = R.layout.create_language_dialog;
     }
 
     public static create_language_dialog newInstance() {
         create_language_dialog frag = new create_language_dialog();
         return frag;
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.create_language_dialog, container);
-    }
-
-    @Override
-    public void onStart()
-    {
-        super.onStart();
-        if (getDialog() == null)
-            return;
-
-        getDialog().getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        getDialog().getWindow().setGravity(Gravity.CENTER);
     }
 
     @Override
