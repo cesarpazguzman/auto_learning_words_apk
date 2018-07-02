@@ -131,7 +131,7 @@ public class test_dialog extends dialog_parent {
         if(current_word == all_words.size()){
             FragmentManager fm = getActivity().getSupportFragmentManager();
             test_dialog_done folders_dialog_frag = test_dialog_done.newInstance(all_words.size()-failed_words.size(),
-                    failed_words.size());
+                    failed_words.size(), failed_words);
 
             folders_dialog_frag.show(fm, "new_test_dialog");
             dismiss();

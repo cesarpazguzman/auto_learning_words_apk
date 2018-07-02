@@ -30,6 +30,7 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Dialogs.create_language_dialog;
+import com.personales.proyectos.autolearningwords.Dialogs.dialog_contact;
 import com.personales.proyectos.autolearningwords.Dialogs.dialog_warning;
 import com.personales.proyectos.autolearningwords.Dialogs.folder_dialog;
 import com.personales.proyectos.autolearningwords.Dialogs.folders_dialog_multiple;
@@ -267,6 +268,9 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                             break;
 
                         case R.id.contact:
+                            FragmentManager fm = getSupportFragmentManager();
+                            dialog_contact dialog_contact_frag = dialog_contact.newInstance();
+                            dialog_contact_frag.show(fm, "new_dialog_contact_frag");
                             break;
                     }
                     return false;

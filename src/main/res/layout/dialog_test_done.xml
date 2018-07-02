@@ -75,4 +75,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/text_correct"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/bt_see_failed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:gravity="bottom"
+        android:text="VER FALLADAS"
+        android:theme="@style/PrimaryFlatButton"
+        app:layout_constraintBaseline_toBaselineOf="@+id/bt_close_test"
+        app:layout_constraintEnd_toStartOf="@+id/bt_close_test" />
 </android.support.constraint.ConstraintLayout>
