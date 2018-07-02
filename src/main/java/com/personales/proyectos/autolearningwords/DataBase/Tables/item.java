@@ -6,13 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Interfaces.tableInterface;
-import com.personales.proyectos.autolearningwords.Models.folder_model;
 import com.personales.proyectos.autolearningwords.Models.item_model;
 import com.personales.proyectos.autolearningwords.Models.session;
 
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
 
 public class item implements tableInterface {
 

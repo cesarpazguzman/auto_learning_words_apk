@@ -8,7 +8,6 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -17,7 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
-import com.personales.proyectos.autolearningwords.R;
+import com.personales.proyectos.autolearningwords.Adapter.multi_select_adapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +41,6 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             for (UnderlayButton button : buttons){
-                System.out.println("ENTRA3");
                 if(button.onClick(e.getX(), e.getY()))
                     break;
             }
@@ -58,7 +56,7 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
     public static void setISTOUCH(boolean value){
         IS_TOUCH = value;
         if(value)
-            baseViewHolder.MULTISELECT_ACTIVED = false;
+            multi_select_adapter.MULTISELECT_ACTIVED = false;
     }
 
     public static int getSwipedPos(){ return swipedPos;}
@@ -252,7 +250,6 @@ public abstract class SwipeHelper extends ItemTouchHelper.SimpleCallback {
         }
 
         public boolean onClick(float x, float y){
-            System.out.println("ENTRA2");
             if (clickRegion != null && clickRegion.contains(x, y)){
                 clickListener.onClick(pos);
                 return true;

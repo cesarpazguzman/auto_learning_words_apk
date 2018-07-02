@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.personales.proyectos.autolearningwords.Adapter.multi_select_adapter;
 import com.personales.proyectos.autolearningwords.Base.SwipeHelper;
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
 import com.personales.proyectos.autolearningwords.MainActivity;
@@ -42,7 +43,7 @@ public class folderViewHolder extends baseViewHolder<folder_model> {
 
     private View.OnClickListener click_listener = new View.OnClickListener() {
         public void onClick(View v) {
-            if(!baseViewHolder.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1 ){
+            if(!multi_select_adapter.MULTISELECT_ACTIVED && SwipeHelper.getSwipedPos()==-1 ){
                 SwipeHelper.setISTOUCH(false);
                 //Cambio de elementos en la lista
                 Intent intent = new Intent(context, MainActivity.class);

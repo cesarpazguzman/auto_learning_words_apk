@@ -70,6 +70,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
     private InputMethodManager imm;
     private Menu menu_principal;
     private session _session;
+    private FragmentManager fm;
 
     @Override
     public int getLayoutId() {
@@ -86,6 +87,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         mainTypeViewModel = new mainTypeViewModel();
         alertDialogHelper =new AlertDialogHelper(this);
         db_manager = databaseManager.getInstance(this);
+        fm = getSupportFragmentManager();
 
         imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -255,22 +257,12 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     switch (item.getItemId()) {
                         case R.id.test:
                             if(!warning_language()){
-                                FragmentManager fm = getSupportFragmentManager();
-                                folders_dialog_multiple folders_dialog_frag = folders_dialog_multiple.newInstance();
-                                folders_dialog_frag.show(fm, "new_folders_dialog_multiple");
+                                folders_dialog_multiple.newInstance().show(fm, "new_folders_dialog_multiple");
                             }
                             break;
 
-                        case R.id.export_data:
-                            break;
-
-                        case R.id.import_data:
-                            break;
-
                         case R.id.contact:
-                            FragmentManager fm = getSupportFragmentManager();
-                            dialog_contact dialog_contact_frag = dialog_contact.newInstance();
-                            dialog_contact_frag.show(fm, "new_dialog_contact_frag");
+                            dialog_contact.newInstance().show(fm, "new_dialog_contact_frag");
                             break;
                     }
                     return false;
@@ -293,9 +285,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                 @Override
                 public boolean onMenuItemClick(final MenuItem item) {
                     if(item.getItemId() == 100){
-                        FragmentManager fm = getSupportFragmentManager();
-                        create_language_dialog create_language_dialog_frag = create_language_dialog.newInstance();
-                        create_language_dialog_frag.show(fm, "new_create_language_dialog");
+                        create_language_dialog.newInstance().show(fm, "new_create_language_dialog");
+
                     }else if(item.getItemId()>100 && item.getItemId() < 201){
                         menu_principal.getItem(0).setTitle(languages.get(-101+item.getItemId()).getName());
                         _session.set_language_translation(languages.get(-101+item.getItemId()).getId());
@@ -308,7 +299,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                     }
                     else if(item.getItemId()>200){
                         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                        builder.setMessage("Va a eliminar un idioma, eso implica que se eliminarán todas sus palabras, desea continuar?")
+                        builder.setMessage(R.string.remove_lang)
                                 .setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
                                         // FIRE ZE MISSILES!
@@ -344,9 +335,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
     private boolean warning_language(){
         if(session.getInstance().get_language_translation()==-1){
-            FragmentManager fm = getSupportFragmentManager();
-            dialog_warning dialog_warning_frag = dialog_warning.newInstance("Debe escoger un idioma para hacer esta acción");
-            dialog_warning_frag.show(fm, "new_folder_dialog");
+            dialog_warning.newInstance(getResources().getString(R.string.warning_lang))
+                    .show(fm, "new_folder_dialog");
             return true;
         }
         return false;
@@ -376,7 +366,6 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                             getResources().getString(R.string.cancel), "", 1, true, null);
                     return true;
                 case R.id.action_move:
-                    FragmentManager fm = getSupportFragmentManager();
                     ArrayList<Integer> folder_ids_selected = new ArrayList<>();
                     for(itemVisitable it:custom_adapter.get_selected_items()){
                         if(it.type(mainTypeViewModel)[1] == itemVisitable.FOLDER){
@@ -384,8 +373,8 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
                         }
                     }
 
-                    folders_dialog_simple folders_dialog_frag = folders_dialog_simple.newInstance(folder_ids_selected);
-                    folders_dialog_frag.show(fm, "new_folders_dialog");
+                    folders_dialog_simple.newInstance(folder_ids_selected)
+                            .show(fm, "new_folders_dialog");
                 default:
                     break;
             }
@@ -473,33 +462,22 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
 
 
     private void add_folder_dialog(){
-        FragmentManager fm = getSupportFragmentManager();
-        folder_dialog folder_dialog_frag = folder_dialog.newInstance();
-        folder_dialog_frag.show(fm, "new_folder_dialog");
-
+        folder_dialog.newInstance().show(fm, "new_folder_dialog");
     }
 
     private void add_folder_dialog(int folder_id, String name){
-
-        FragmentManager fm = getSupportFragmentManager();
-        folder_dialog folder_dialog_frag = folder_dialog.newInstance(folder_id, name);
-        folder_dialog_frag.show(fm, "modify_item_dialog");
+        folder_dialog.newInstance(folder_id, name).show(fm, "modify_item_dialog");
     }
 
     private void add_element_dialog(){
-        FragmentManager fm = getSupportFragmentManager();
-        item_dialog item_dialog_frag = item_dialog.newInstance();
-        item_dialog_frag.show(fm, "new_item_dialog");
-
+        item_dialog.newInstance().show(fm, "new_item_dialog");
     }
 
     private void add_element_dialog(int item_id, String original, String traduccion,
                                     String example_1, String example_2, String comment){
 
-        FragmentManager fm = getSupportFragmentManager();
-        item_dialog item_dialog_frag = item_dialog.newInstance(item_id, original, traduccion, example_1,
-                example_2, comment);
-        item_dialog_frag.show(fm, "modify_item_dialog");
+        item_dialog.newInstance(item_id, original, traduccion, example_1,
+                example_2, comment).show(fm, "modify_item_dialog");
     }
 
     @Override
@@ -645,9 +623,7 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         }
 
         if(items_to_test.size()>0){
-            FragmentManager fm = getSupportFragmentManager();
-            test_dialog folders_dialog_frag = test_dialog.newInstance(items_to_test);
-            folders_dialog_frag.show(fm, "new_test_dialog");
+            test_dialog.newInstance(items_to_test).show(fm, "new_test_dialog");
         }
     }
 }

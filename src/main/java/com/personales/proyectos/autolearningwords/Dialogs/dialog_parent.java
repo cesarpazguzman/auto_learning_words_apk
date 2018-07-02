@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.personales.proyectos.autolearningwords.R;
 
 public abstract class dialog_parent extends DialogFragment {
 

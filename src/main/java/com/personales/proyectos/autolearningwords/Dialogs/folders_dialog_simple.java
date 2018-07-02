@@ -2,10 +2,6 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.util.SparseBooleanArray;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -14,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
+import com.personales.proyectos.autolearningwords.Adapter.multi_select_adapter;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.folder;
 import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
@@ -69,13 +65,12 @@ public class folders_dialog_simple extends dialog_parent {
         list_folders.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         list_folders.setOnItemClickListener(list_folders_listener());
 
-        bt_close.setEnabled(false);
         bt_move.setEnabled(false);
 
         bt_close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                baseViewHolder.MULTISELECT_ACTIVED = false;
+                multi_select_adapter.MULTISELECT_ACTIVED = false;
                 dismiss();
             }
         });
@@ -118,6 +113,7 @@ public class folders_dialog_simple extends dialog_parent {
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long l) {
                 int a = list_folders.getCheckedItemPosition();
                 current_selection = elements_list.get(pos);
+                bt_move.setEnabled(true);
             }
         };
     }

@@ -2,12 +2,8 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,7 +11,6 @@ import android.widget.TextView;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.R;
 
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 

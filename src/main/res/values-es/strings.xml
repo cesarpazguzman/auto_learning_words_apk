@@ -58,4 +58,10 @@
     <string name="export_data_menu">Exportar base de datos</string>
     <string name="import_data_menu">Importar base de datos</string>
 
+    <string name="remove_lang">Va a eliminar un idioma, eso implica que se eliminarán todas sus palabras, desea continuar?</string>
+    <string name="warning_lang">Debe escoger un idioma para hacer esta acción</string>
+    <string name="test_cancel_warning">Va a cancelar el test, desea continuar?</string>
+
+    <string name="field_required">*Campo obligatorio</string>
+    <string name="see_failed">VER FALLADAS</string>
 </resources>

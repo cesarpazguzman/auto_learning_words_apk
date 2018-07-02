@@ -63,7 +63,7 @@ public class create_language_dialog extends dialog_parent {
     private void save(){
 
         if(et_lang_name== null || et_lang_name.getText().toString().equals("")){
-            til_lang_name.setError("*Campo obligatorio");
+            til_lang_name.setError(getActivity().getResources().getString(R.string.field_required));
             return;
         }
 

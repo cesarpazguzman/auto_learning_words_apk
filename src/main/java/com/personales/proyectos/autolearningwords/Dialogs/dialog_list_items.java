@@ -10,12 +10,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 
 import com.personales.proyectos.autolearningwords.Adapter.custom_adapter;
-import com.personales.proyectos.autolearningwords.DataBase.databaseManager;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.Models.mainTypeViewModel;
 import com.personales.proyectos.autolearningwords.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import butterknife.BindView;

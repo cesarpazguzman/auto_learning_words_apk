@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:gravity="bottom"
-        android:text="VER FALLADAS"
+        android:text="@string/see_failed"
         android:theme="@style/PrimaryFlatButton"
         app:layout_constraintBaseline_toBaselineOf="@+id/bt_close_test"
         app:layout_constraintEnd_toStartOf="@+id/bt_close_test" />

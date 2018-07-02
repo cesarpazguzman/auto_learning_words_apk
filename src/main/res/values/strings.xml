@@ -55,4 +55,11 @@
     <string name="contact_menu">Contact</string>
     <string name="export_data_menu">Export database</string>
     <string name="import_data_menu">Import database</string>
+
+    <string name="remove_lang">All words will be removed, do you wish to continue?</string>
+    <string name="warning_lang">You have to choose a language in order to execute this action</string>
+    <string name="test_cancel_warning">The test is going to cancelled, do you wish to continue?</string>
+
+    <string name="field_required">*Required</string>
+    <string name="see_failed">SEE FAILED</string>
 </resources>

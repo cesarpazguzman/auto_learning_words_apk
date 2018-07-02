@@ -3,11 +3,8 @@ package com.personales.proyectos.autolearningwords.Dialogs;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -93,7 +90,7 @@ public class folder_dialog extends dialog_parent {
 
     private void save(boolean open_again){
         if(et_folder_name== null || et_folder_name.getText().toString().equals("")){
-            til_folder_name.setError("*Campo obligatorio");
+            til_folder_name.setError(getActivity().getResources().getString(R.string.field_required));
             return;
         }
         FolderDialogListener listener = (FolderDialogListener) getActivity();

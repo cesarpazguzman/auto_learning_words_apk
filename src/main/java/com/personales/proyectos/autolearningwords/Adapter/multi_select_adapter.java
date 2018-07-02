@@ -3,8 +3,6 @@ package com.personales.proyectos.autolearningwords.Adapter;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
@@ -13,14 +11,12 @@ import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
 import com.personales.proyectos.autolearningwords.R;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
     private ArrayList<itemVisitable> selected_items;
     private TypeViewModelFactory typeViewModelFactory;
     private Context context;
+    public static boolean MULTISELECT_ACTIVED = false;
 
     public multi_select_adapter(TypeViewModelFactory typeViewModelFactory, final Context context){
         selected_items=new ArrayList<itemVisitable>(){
@@ -39,7 +35,7 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
 
     public void add_selected_item(itemVisitable item){
         selected_items.add(item);
-        baseViewHolder.MULTISELECT_ACTIVED = true;
+        MULTISELECT_ACTIVED = true;
     }
 
     public int getItemViewType_selected(int position) {
@@ -49,12 +45,12 @@ public class multi_select_adapter extends RecyclerView.Adapter<baseViewHolder>{
     public void remove_selected_item(itemVisitable item){
         selected_items.remove(item);
 
-        baseViewHolder.MULTISELECT_ACTIVED = selected_items.size()!=0;
+        MULTISELECT_ACTIVED = selected_items.size()!=0;
     }
 
     public void clear_selected_item(){
         selected_items = new ArrayList<>();
-        baseViewHolder.MULTISELECT_ACTIVED = false;
+        MULTISELECT_ACTIVED = false;
     }
 
     public ArrayList<itemVisitable> get_selected_items(){

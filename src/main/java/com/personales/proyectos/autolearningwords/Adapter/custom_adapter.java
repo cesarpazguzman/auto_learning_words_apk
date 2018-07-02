@@ -1,9 +1,6 @@
 package com.personales.proyectos.autolearningwords.Adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +8,6 @@ import android.view.ViewGroup;
 import com.personales.proyectos.autolearningwords.Base.baseViewHolder;
 import com.personales.proyectos.autolearningwords.Interfaces.TypeViewModelFactory;
 import com.personales.proyectos.autolearningwords.Interfaces.itemVisitable;
-import com.personales.proyectos.autolearningwords.Models.folder_model;
-import com.personales.proyectos.autolearningwords.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

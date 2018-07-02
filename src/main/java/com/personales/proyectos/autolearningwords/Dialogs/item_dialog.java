@@ -1,14 +1,11 @@
 package com.personales.proyectos.autolearningwords.Dialogs;
 
 import android.support.design.widget.TextInputLayout;
-import android.support.v4.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -77,7 +74,7 @@ public class item_dialog extends dialog_parent {
 
         if(!new_item){
             bt_save_close.setVisibility(View.INVISIBLE);
-            bt_save_new.setText("Guardar");
+            bt_save_new.setText(R.string.save);
             bt_close_item.setGravity(Gravity.CENTER);
         }
 
@@ -134,7 +131,7 @@ public class item_dialog extends dialog_parent {
 
     private void save(boolean open_again){
         if(et_item_original== null || et_item_original.getText().toString().equals("")){
-            til_original.setError("*Campo obligatorio");
+            til_original.setError(getActivity().getResources().getString(R.string.field_required));
             return;
         }
         String comment = !et_comments.getText().toString().isEmpty() ? et_comments.getText().toString() : "";
