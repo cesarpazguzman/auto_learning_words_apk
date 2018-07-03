@@ -212,8 +212,11 @@ public class MainActivity extends BaseActivity implements AlertDialogHelper.Aler
         searchView.setOnQueryTextListener(this);
 
         menu_principal = menu;
+        String name_lang = ((language)(db_manager.get_table_instance(language.NAME_TABLE))).get_name(_session.get_language_translation());
+        if(name_lang == null || name_lang.isEmpty())
+            name_lang = getResources().getString(R.string.language_menu);
         menu_principal.getItem(0).setTitle(_session.get_language_translation() == -1 ?getResources().getString(R.string.language_menu):
-                ((language)(db_manager.get_table_instance(language.NAME_TABLE))).get_name(_session.get_language_translation()));
+                name_lang);
 
         return super.onCreateOptionsMenu(menu);
     }

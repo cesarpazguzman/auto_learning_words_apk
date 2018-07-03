@@ -4,6 +4,8 @@ import android.support.design.widget.TextInputLayout;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -111,6 +113,8 @@ public class item_dialog extends dialog_parent {
             }
         });
 
+        bt_save_new.setEnabled(false);
+        bt_save_close.setEnabled(false);
 
         if(!new_item){
             fill_values();
@@ -122,6 +126,22 @@ public class item_dialog extends dialog_parent {
             et_example_two.setVisibility(View.VISIBLE);
             add_example_item.setVisibility(View.GONE);
         }
+
+        et_item_original.addTextChangedListener(new TextWatcher() {
+
+            public void afterTextChanged(Editable s) {}
+
+            public void beforeTextChanged(CharSequence s, int start,
+                                          int count, int after) {
+            }
+
+            public void onTextChanged(CharSequence s, int start,
+                                      int before, int count) {
+                 bt_save_new.setEnabled(s.length() != 0);
+                 bt_save_close.setEnabled(s.length() != 0);
+            }
+        });
+
 
 
         getDialog().getWindow().setSoftInputMode(

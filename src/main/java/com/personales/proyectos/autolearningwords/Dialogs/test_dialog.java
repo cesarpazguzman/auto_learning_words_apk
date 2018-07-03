@@ -146,23 +146,23 @@ public class test_dialog extends dialog_parent {
         String string_final = "";
         item_model viewModel = (item_model) all_words.get(current_word-1);
         if(!viewModel.getExample1().isEmpty()){
-            string_final += R.string.example1+": "+viewModel.getExample1();
+            string_final += getContext().getResources().getString(R.string.example1)+": "+viewModel.getExample1();
             if(!viewModel.getExample2().isEmpty() || !viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getExample2().isEmpty()){
-            string_final += R.string.example2+": "+viewModel.getExample2();
+            string_final += getContext().getResources().getString(R.string.example2)+": "+viewModel.getExample2();
             if(!viewModel.getComment().isEmpty())
                 string_final += "\n\n";
         }
         if(!viewModel.getComment().isEmpty()){
-            string_final += R.string.comment_min+": "+viewModel.getComment();
+            string_final += getContext().getResources().getString(R.string.comment_min)+": "+viewModel.getComment();
         }
 
         SpannableStringBuilder str = new SpannableStringBuilder(string_final);
-        str = set_text_bold(str, R.string.example1+":", string_final);
-        str = set_text_bold(str, R.string.example2+":", string_final);
-        str = set_text_bold(str, R.string.comment_min+":", string_final);
+        str = set_text_bold(str, getContext().getResources().getString(R.string.example1)+":", string_final);
+        str = set_text_bold(str, getContext().getResources().getString(R.string.example2)+":", string_final);
+        str = set_text_bold(str, getContext().getResources().getString(R.string.comment_min)+":", string_final);
         return str;
     }
 

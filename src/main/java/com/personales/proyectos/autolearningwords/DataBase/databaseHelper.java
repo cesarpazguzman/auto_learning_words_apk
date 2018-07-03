@@ -9,7 +9,7 @@ import com.personales.proyectos.autolearningwords.DataBase.Tables.item;
 import com.personales.proyectos.autolearningwords.DataBase.Tables.language;
 
 public class databaseHelper extends SQLiteOpenHelper {
-    private static final String DATABASE_NAME = "words_v6.db";
+    private static final String DATABASE_NAME = "customWords.db";
     private static final int DATABASE_SCHEME_VERSION = 1;
 
     public databaseHelper(Context context) {

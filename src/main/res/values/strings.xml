@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">autolearningWords</string>
+    <string name="app_name">My Words</string>
     <string name="action_settings">Settings</string>
     <string name="img_folder">icon folder</string>
     <string name="save_close">Save and close</string>
